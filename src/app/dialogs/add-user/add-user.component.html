@@ -1,0 +1,152 @@
+<div class="mat-dialog-heading">
+  <h2 mat-dialog-title>
+    {{data.title}}
+  </h2>
+
+</div>
+<div class="mat-dialog-content">
+
+  <form [formGroup]="addFormdata" class="editform">
+    <div class="user-detail-content col-6">
+        <mat-spinner *ngIf="disablesSave" diameter="30"></mat-spinner>
+
+      <pi-form-field >
+          <label class="label-name">
+              First Name
+            <span class="required">*</span>
+          </label>
+        <input pi-input autocomplete="off" formControlName="first_name" placeholder="First Name">
+        <div *ngIf="isSubmited && f.first_name.errors?.required">
+          <mat-error>Please enter First Name</mat-error>
+        </div>
+        <div *ngIf="isSubmited && f.first_name.errors?.maxlength">
+          <mat-error> <span class="capitalize">First
+              name</span> should not exceed 255 characters</mat-error>
+        </div>
+      </pi-form-field>
+
+    </div>
+    <div class="user-detail-content col-6">
+      <pi-form-field >
+          <label class="label-name">
+              Last Name
+            <span class="required">*</span>
+          </label>
+        <input pi-input autocomplete="off" required formControlName="last_name" placeholder="Last Name">
+        <div *ngIf="isSubmited && f.last_name.errors?.required">
+          <mat-error>Please enter Last Name</mat-error>
+        </div>
+        <div *ngIf="isSubmited && f.last_name.errors?.maxlength">
+          <mat-error> <span class="capitalize">Last
+              name</span> should not exceed 255 characters</mat-error>
+        </div> 
+      </pi-form-field>
+
+
+    </div>
+    <div class="user-detail-view email ">
+      <pi-form-field >
+          <label class="label-name">
+              Email
+            <span class="required">*</span>
+          </label>
+        <input pi-input autocomplete="off" required formControlName="email" placeholder="Email">
+        <div *ngIf="isSubmited && f.email.errors?.required">
+          <mat-error>Please enter Email </mat-error>
+          <mat-error *ngIf="0">Please enter a valid email address
+          </mat-error>
+        </div>
+        <div *ngIf="isSubmited && f.email.errors?.maxlength">
+          <mat-error> <span class="capitalize">Email</span> should not exceed 255 characters</mat-error>
+        </div>
+        <div *ngIf="isSubmited && f.email.errors?.email">
+          <mat-error> <span class="capitalize">Email</span> must be a valid email address</mat-error>
+        </div>
+      
+          <mat-error *ngIf="errors">{{ errors }}
+          </mat-error>
+      </pi-form-field>
+
+
+    </div>
+    <div class="user-detail-view d-flex ">
+      <div class="user-detail-content ">
+        <div class="role-select ">
+          <pi-select style="text-transform:capitalize;" [options]="userRolesList || []" formControlName="user_type"
+            placeholder="No Access" label="User Role">
+          </pi-select>
+        </div>
+      </div>
+    </div>
+    <div class="user-detail-view d-flex ">
+      <div class="user-detail-content ">
+        <div class="role-select ">
+          <pi-select style="text-transform:capitalize;" [options]="statusRolesList || []" formControlName="status"
+            label="Status">
+          </pi-select>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h5 class="product-header">Access Instance</h5>
+      <div formArrayName="instances">
+        <div class="user-access-details user-profile-alignment-view d-flex"
+          *ngFor="let instance of instancesList;let i=index" [formGroupName]="i">
+          <aside>
+            <div class="user-contact-details ">
+              <div class="user-access-body-sec">
+                <div class="user-access-body d-flex">
+                  <div class="user-access-item">
+                    <span class="left-sec">
+                      <span class="instance-logo" [ngClass]="{'no-border1': !instance.instancelogoUrl}">
+                        <img *ngIf="instance.instancelogoUrl" [src]="instance.instancelogoUrl"
+                          (error)="displayDefaultImage($event)" />
+                        <pi-icon background="#3DC4A6" class="sm square" *ngIf="!instance.instancelogoUrl"><i
+                            class="product-icon icon-instances"></i></pi-icon>
+                      </span>
+                      <span class="item-name">{{instance.name}}</span>
+                    </span>
+                    <!-- <span class="right-sec">
+                      <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                        [formControlName]="instancesList[i]?.id">
+                        <mat-button-toggle value="yes">Yes
+                        </mat-button-toggle>
+                        <mat-button-toggle value="no">No
+                        </mat-button-toggle>
+                      </mat-button-toggle-group>
+                    </span> -->
+                    <span class="right-sec">  
+                      <mat-checkbox style="display: block;"  class="example-margin" (change)="check($event, instance)">
+                          </mat-checkbox>
+                  </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</div>
+<div class="mat-dialog-footer">
+  <div class="error-msg">
+    <!-- <div class="pi-error" *ngIf="errorMsg != ''">{{ errorMsg }}</div> -->
+  </div>
+
+  <div class="mat-dialog-footer">
+    <div class="error-msg">
+      <!-- <div class="pi-error" *ngIf="errorMsg != ''">{{ errorMsg }}</div> -->
+    </div>
+
+    <div class="button-actions box">
+      <button pi-button (click)="closeDialog()" color="subtle">Cancel</button>
+
+      <button pi-button color="primary" (click)="saveUser()" [disabled]="disablesSave">
+        Add User
+      </button>
+    </div>
+  </div>
+</div>

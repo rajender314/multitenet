@@ -1,0 +1,218 @@
+<div class="product-side-window user-account-details-sec">
+    <div class="sticky-layout">
+        <header class="padding-0">
+            <div class="detail-view-edit d-flex align-items-center justify-content-between profile-body-sec">
+                <div class="left-headding flex-width">
+                    <h1>
+                        Manage Account
+                    </h1>
+                </div>
+                <div class="right-headding d-flex align-items-center  justify-content-end flex-width"></div>
+            </div>
+        </header>
+        <ng-template #validIntlPhone class="IntlPhone-format">
+            (123) 456 - 7890<br />
+            123-456-7890<br />
+            123.456.7890<br />
+            123-456-7890 x 223<br />
+        </ng-template>
+        <div class="product-body  padding-20">
+            <div class="detail-view-edit profile-body-sec">
+                <mat-tab-group>
+                    <mat-tab>
+                        <ng-template mat-tab-label class="tabel-header">
+                            Personal Details
+                        </ng-template>
+                        <div class="d-flex flex-row personal-details-tab">
+                            <div id="wrapper">
+                                <div id="left">
+                                    <div class="personal-details-img-sec">
+                                        <div class="rounded-circle" (click)="addImage($event)"
+                                            style="background-size: 100%;background-position: 50% 50%; background-repeat: no-repeat;"
+                                            [ngStyle]="{
+                                                            'background-image': 'url(' + croppedImage + '), url(' + assetsPath + '/images/avatar.png)'
+                                                          }">
+                                            <img [src]="croppedImage" [hidden]="true"
+                                                (error)="isProfilePicLoaded(false)" (load)="isProfilePicLoaded(true)" />
+                                            <div class="img-content">
+                                                <div class="upload-remove-img">
+                                                    <div class="camera-icon">
+                                                        <i class="pixel-icons icon-camera"></i>
+                                                    </div>
+                                                    <p>{{ profile.addLabel }}</p>
+                                                    <!-- <p class="remove-text" [hidden]="!profile.remove"
+                                                                        (click)="removeUserProfilePic($event)">
+                                                                        <span><i class="pixel-icon icon-delete" title="Delete"></i></span>Remove
+                                                                    </p> -->
+                                                </div>
+                                            </div>
+                                            <input type="file" id="addImage" style="display:none" ng2FileSelect
+                                                [uploader]="uploaderLogo" accept="image/x-png,image/gif,image/jpeg" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="right">
+
+                                    <div class="personal-details-form-sec">
+                                        <div class="personal-details-form-sec">
+                                            <!-- <input type="text" style="display:none" [(ngModel)]="imageData" /> -->
+
+                                            <form [formGroup]="registerForm" class="register-form-details">
+
+                                                <pi-form-field label="First Name">
+                                                    <input pi-input autocomplete="off" required
+                                                    (input)="valChanged()"
+                                                        [(ngModel)]="userProfile.first_name"
+                                                        formControlName="first_name" placeholder="First Name"
+                                                        type="text" class="form-control" limitInput="255">
+                                                </pi-form-field>
+
+                                                <mat-error
+                                                    *ngIf="registration.first_name.touched && registration.first_name.invalid">
+                                                    First Name is required</mat-error>
+                                                <pi-form-field label="Last Name">
+                                                    <input pi-input autocomplete="off" required
+                                                    (input)="valChanged()"
+                                                        [(ngModel)]="userProfile.last_name" formControlName="last_name"
+                                                        placeholder="Last Name" type="text" class="form-control"
+                                                        limitInput="255">
+                                                </pi-form-field>
+                                                <mat-error
+                                                    *ngIf="registration.last_name.touched && registration.last_name.invalid">
+                                                    Last Name is required</mat-error>
+
+                                                <pi-form-field label="Email ID">
+                                                    <input pi-input autocomplete="off" required
+                                                    (input)="valChanged()"
+                                                        [(ngModel)]="userProfile.email" formControlName="email"
+                                                        placeholder="Email ID" type="email" class="form-control"
+                                                        limitInput="255" [disabled]="true">
+                                                </pi-form-field>
+                                                <mat-error
+                                                    *ngIf="registration.email.touched && registration.email.errors?.required">
+                                                    Email is required
+                                                </mat-error>
+                                                <pi-select style="text-transform:capitalize;"
+                                                (input)="valChanged()"
+                                                    [(ngModel)]="userProfile.user_type" [options]="userRolesList || []"
+                                                    placeholder="No Access" label="User Role"
+                                                    formControlName="user_type" [disabled]="true">
+                                                </pi-select>
+
+                                                <mat-error
+                                                    *ngIf="registration.email.touched && registration.email.errors?.pattern">
+                                                    Please enter valid email</mat-error>
+                                                <pi-form-field>
+                                                    <button pi-button color="primary" class="primary-button "
+                                                        color="primary"
+                                                        [disabled]="!registerForm.valid || registerForm.pristine || disablesSave"
+                                                        (click)="saveUserProfile()">
+                                                        Save changes
+                                                    </button>
+                                                </pi-form-field>
+
+
+                                            </form>
+                                        </div>
+                                        <div class="col-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab>
+                        <ng-template mat-tab-label class="tabel-header">
+                            Change Password
+                        </ng-template>
+                        <div class="d-flex flex-row password-details">
+                            <!-----change password code starts here-->
+                            <div id="change-password-left">
+                                <div class="password-details-form-sec">
+                                    <form [formGroup]="newPasswordForm">
+                                        <pi-form-field label="Current Password">
+                                            <input pi-input autocomplete="off" required
+                                                formControlName="currentPassword" placeholder="Current Password"
+                                                type="password" class="form-control">
+                                        </pi-form-field>
+                                        <mat-error
+                                            *ngIf="newPassword.currentPassword.touched && newPassword.currentPassword.invalid">
+                                            Current password is required</mat-error>
+                                        <pi-form-field label="New Password">
+                                            <input pi-input autocomplete="off" required formControlName="newPassword"
+                                                placeholder="New Password" type="password" class="form-control"
+                                                appPasswordMatch [password1]="newPassword.newPassword"
+                                                [password2]="newPassword.reNewPassword">
+                                        </pi-form-field>
+                                        <mat-error
+                                            *ngIf="newPassword.newPassword.touched && newPassword.newPassword.errors?.required">
+                                            New password is required
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="newPassword.newPassword.touched && newPassword.newPassword.errors?.minlength">
+                                            Password must be at least 8 characters
+                                        </mat-error>
+
+                                        <mat-error *ngIf="
+                                  newPassword.newPassword.touched &&
+                                  !newPassword.newPassword.errors?.minlength &&
+                                  newPassword.newPassword.errors?.pattern">
+                                            Password pattern doesn’t match
+                                        </mat-error>
+                                        <pi-form-field label="Re-Enter New Password">
+                                            <input pi-input autocomplete="off" required formControlName="reNewPassword"
+                                                placeholder="Re-Enter New Password" type="password" class="form-control"
+                                                appPasswordMatch [password1]="newPassword.newPassword"
+                                                [password2]="newPassword.reNewPassword">
+                                        </pi-form-field>
+                                        <mat-error
+                                            *ngIf="newPassword.reNewPassword.touched && newPassword.reNewPassword.errors?.required">
+                                            Please re-enter new password.
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="newPassword.reNewPassword.touched && newPassword.reNewPassword.errors?.match">
+                                            Passwords must match.
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="newPassword.newPassword.touched && newPassword.newPassword.errors?.match">
+                                            Passwords must match.
+                                        </mat-error>
+
+                                        <pi-form-field>
+                                            <button class="primary-button m-l-15" pi-button color="primary"
+                                                [disabled]="!newPasswordForm.valid" (click)="saveNewPassword()">
+                                                Change Password
+                                            </button>
+                                        </pi-form-field>
+
+                                    </form>
+                                </div>
+                            </div>
+                            <!-----change password code ends here---->
+                            <div id="change-password-right">
+                                <div class="password-details-hint-sec">
+                                    <div class="right-sec">
+                                        <div class="header-sec">
+                                            <h3>Password must be</h3>
+                                        </div>
+                                        <div class="body-sec">
+                                            <p><i class="pixel-icons icon-checkbox-tick"></i>Minimum 8-16 characters
+                                            </p>
+                                            <p><i class="pixel-icons icon-checkbox-tick"></i>At least 1 uppercase
+                                                character
+                                            </p>
+                                            <p><i class="pixel-icons icon-checkbox-tick"></i>At least 1 lowercase
+                                                character
+                                            </p>
+                                            <p><i class="pixel-icons icon-checkbox-tick"></i>At least 1 number</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-tab>
+
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</div>

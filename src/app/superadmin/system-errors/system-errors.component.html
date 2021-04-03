@@ -1,0 +1,13 @@
+<div class="admin-header">
+    <h3>System Errors</h3>
+</div>
+<ag-grid-angular style="width: 100%; height: 100%;" 
+    class="ag-theme-balham ag-grid-email admin-grid" 
+    [rowData]="systemErrors"
+    [columnDefs]="columnDefs" 
+    (cellClicked)="onCellClicked($event)"
+    [defaultColDef]="defaultColDef"   
+    [animateRows]="true"
+    [getRowHeight]="getRowHeight"
+    [pagination]="true">
+</ag-grid-angular> 

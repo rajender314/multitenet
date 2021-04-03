@@ -1,0 +1,25 @@
+<div class="app">
+  <app-header (onheaderOpen)="headerOpen($event)"></app-header>
+  <!-- Spinner Content Starts -->
+  <div [hidden]="!showSpinner" class="main-loading">
+    <div class="loader-new"><span></span></div>
+  </div>
+  <!-- Spinner Content Ends -->
+  <div class="app-container" [class.menuOpen]="toggleClass">
+    <div style="width: 100%">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<!-- Toolbar -->
+<!-- <div class="toolbar" role="banner">
+  <span style="margin-left: 15px;">  <span><mat-icon (click)="toggleMenu()">menu</mat-icon></span> Productisation 
+     
+    </span>
+  <div class="spacer"></div>
+  <a href="#" (click)="logout()" class="logout">Logout</a>
+</div>
+<div *ngIf="showToggle"> 
+    <app-menu></app-menu>
+</div>
+<router-outlet></router-outlet>  -->

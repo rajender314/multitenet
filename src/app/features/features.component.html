@@ -1,0 +1,81 @@
+<div style="text-align:center">
+    <h2>{{ title }}</h2>
+</div>
+<form [formGroup]="featuresForm">
+    <div class="single category">
+        <div *ngFor="let feature of features">
+            <h4 class="side-title">{{feature.name}}</h4>
+            <ul class="list-unstyled">
+                <li *ngFor="let childList of feature.childList" class="child-item">
+                    <div class="parent-container">
+                        <span class="feature-name">{{childList.name}} </span>
+                        <span class="feature-actions">
+                            <div *ngIf="childList.type=='radio'">
+                                <mat-radio-group class="tp-radio-group" [formControlName]="childList.code">
+                                    <mat-radio-button class="tp-radio-button" *ngFor="let option of childList.options"
+                                        [value]="option.value">
+                                        {{option.label}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div *ngIf="childList.type=='select'">
+                                <mat-form-field>
+                                    <mat-select [formControlName]="childList.code">
+                                        <mat-option *ngFor="let option of childList.options" [value]="option.value">
+                                            {{option.label}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="childList.type=='text'">
+                                <mat-form-field>
+                                    <input matInput [formControlName]="childList.code" placeholder="{{childList.name}}">
+                                </mat-form-field>
+                            </div>
+
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <input matInput type="input" (click)="saveFormInfo()" value="Save">
+</form>
+
+
+<!-- <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+    {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+</button> -->
+<!-- <mat-horizontal-stepper [linear]="isLinear" #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Details</ng-template>
+            <mat-form-field>
+                <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+            </mat-form-field>
+            <div>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Themes</ng-template>
+            <mat-form-field>
+                <input matInput placeholder="Address" formControlName="secondCtrl" required>
+            </mat-form-field>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Features</ng-template>
+        You are now done.
+        <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+    </mat-step>
+</mat-horizontal-stepper> -->

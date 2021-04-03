@@ -1,0 +1,21 @@
+<div layout-padding>
+    <div class="admin-header">
+        <h3>General Settings</h3>
+    </div>
+    <h4>Email Notifications</h4>
+    <div class="email-notifications-card">
+        <mat-radio-group aria-label="Select an option" class="tp-radio-group">
+            <mat-radio-button (click)="checkedRadioButton(1)" color="primary" [checked]="radioValue === 1" value="1"
+                class="tp-radio-button">Send Emails</mat-radio-button>
+            <mat-radio-button color="primary" [checked]="radioValue === 2" value="2" (click)="checkedRadioButton(2)"
+                class="tp-radio-button">Stop all out going Emails
+            </mat-radio-button>
+        </mat-radio-group>
+    
+        <p class="action-btns">
+            <button type="button" mat-raised-button (click)="resetForm()"
+                style="text-transform: capitalize;margin-right: 10px;">Cancel</button>
+            <button type="button" mat-button color="primary" [ngClass]="{'disble-button': isChanged=='0'}" class="save-button" (click)="saveSettings()">Save</button>
+        </p>
+    </div>
+</div>

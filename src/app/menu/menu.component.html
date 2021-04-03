@@ -1,0 +1,15 @@
+<ul class="menu-list">
+    <li routerLink="/dashboard" (click)="selectedTab()" routerLinkActive="active">Dashboard </li>
+    <!-- <li routerLink="/instances" (click)="selectedTab()" routerLinkActive="active">Instances <span><span
+                *ngIf="!isCountsLoading">({{instancesCount}})</span>
+            <mat-spinner *ngIf="isCountsLoading" diameter="15" class="md"></mat-spinner>
+        </span></li> -->
+    <li routerLink="/users" (click)="selectedTab()" routerLinkActive="active">Users <span> <span
+                *ngIf="!isCountsLoading">({{usersCount}})</span>
+            <mat-spinner *ngIf="isCountsLoading" diameter="15" class="md"></mat-spinner>
+        </span></li>
+    <li routerLink="/features" (click)="selectedTab()" routerLinkActive="active">Features</li>
+    <li routerLink="/superadmin/settings" (click)="selectedTab()" routerLinkActive="active">Super Admin</li>
+    <!-- <li routerLink="/login_tracking" (click)="selectedTab()" routerLinkActive="active">Login Tracking</li>
+    <li routerLink="/switch_instance"  (click)="selectedTab()" routerLinkActive="active">Switch Instance</li> -->
+</ul>

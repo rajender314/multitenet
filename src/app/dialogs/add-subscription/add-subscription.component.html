@@ -1,0 +1,152 @@
+<div class="mat-dialog-heading">
+    <h2 mat-dialog-title>
+      {{data.title}}
+    </h2>
+  
+  </div>
+  <div class="mat-dialog-content">
+  
+    <form [formGroup]="addFormdata" class="editform">
+      <div class="user-detail-content col-6">
+          <mat-spinner *ngIf="disablesSave" diameter="30"></mat-spinner>
+
+        <pi-form-field >
+            <label class="label-name">
+              Name
+            <span class="required">*</span>
+          </label>
+          <input pi-input autocomplete="off" formControlName="name" placeholder="Name">
+          <div *ngIf="isSubmited && f.name.errors?.required">
+            <mat-error>Please enter  Name</mat-error>
+          </div>
+          <div *ngIf="isSubmited && f.name.errors?.maxlength">
+            <mat-error> <span class="capitalize">First
+                name</span> should not exceed 255 characters</mat-error>
+          </div>
+        </pi-form-field>
+  
+      </div>
+      <div class="user-detail-content col-6">
+        <pi-form-field >
+            <label class="label-name">
+                Price
+              <span class="required">*</span>
+            </label>
+          <input pi-input autocomplete="off" required formControlName="price" placeholder="Price">
+          <div *ngIf="isSubmited && f.price.errors?.required">
+            <mat-error>Please enter Price</mat-error>
+          </div>
+          <div *ngIf="isSubmited && f.price.errors?.maxlength">
+            <mat-error> <span class="capitalize">Last
+                name</span> should not exceed 255 characters</mat-error>
+          </div> 
+        </pi-form-field>
+  
+  
+      </div>
+      
+      <div class="user-detail-view d-flex ">
+        <div class="user-detail-content ">
+          <div class="role-select ">
+            <pi-form-field>
+                <label class="label-name">
+                    Price Currency
+                  <span class="required">*</span>
+                </label>
+              <pi-select style="text-transform:capitalize;" [options]="priceCurrency || []" formControlName="price_currency">
+              </pi-select>
+            </pi-form-field>
+            <div *ngIf="isSubmited && !addFormdata.value.price_currency">
+              <mat-error>Please select Price Currency</mat-error>
+            </div>
+            <!-- <div *ngIf="isSubmited && f.price_currency.errors?.maxlength">
+              <mat-error> <span class="capitalize">First
+                  name</span> should not exceed 255 characters</mat-error>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="user-detail-content col-6">
+        <pi-form-field >
+            <label class="label-name">
+                Duration Period
+              <span class="required">*</span>
+            </label>
+          <input pi-input autocomplete="off" required formControlName="duration_period" placeholder="Duration period">
+          <div *ngIf="isSubmited && f.duration_period.errors?.required">
+            <mat-error>Please enter Duration period</mat-error>
+          </div>
+          <div *ngIf="isSubmited && f.duration_period.errors?.maxlength">
+            <mat-error> <span class="capitalize">Duration period</span> should not exceed 255 characters</mat-error>
+          </div> 
+        </pi-form-field>
+  
+  
+      </div> 
+
+      <div class="user-detail-view d-flex ">
+        <div class="user-detail-content ">
+          <div class="role-select ">
+              <pi-form-field >
+                  <label class="label-name">
+                      Period Type
+                    <span class="required">*</span>
+                  </label>
+            <pi-select style="text-transform:capitalize;" [options]="periodType || []" formControlName="period_type"
+              >
+            </pi-select>
+            </pi-form-field>
+            <div *ngIf="isSubmited && !addFormdata.value.period_type">
+              <mat-error>Please select Period Type</mat-error>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="user-detail-view d-flex ">
+        <div class="user-detail-content ">
+          <div class="role-select ">
+              <pi-form-field >
+                  <label class="label-name">
+                      Status
+                    <span class="required">*</span>
+                  </label>
+            <pi-select style="text-transform:capitalize;" [options]="statusRolesList || []" formControlName="status"
+              >
+            </pi-select>
+            </pi-form-field>
+            <div *ngIf="isSubmited && !addFormdata.value.status">
+              <mat-error>Please select Status</mat-error>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div>
+        <h5 class="product-header">Access Features</h5>
+        <app-permissions  *ngFor="let parent of globalPermissions; let i = index" [permission]="parent"
+         >
+       </app-permissions>
+
+      </div>
+    </form>
+  
+  </div>
+  <div class="mat-dialog-footer">
+    <div class="error-msg">
+      <!-- <div class="pi-error" *ngIf="errorMsg != ''">{{ errorMsg }}</div> -->
+    </div>
+  
+    <div class="mat-dialog-footer">
+      <div class="error-msg">
+        <!-- <div class="pi-error" *ngIf="errorMsg != ''">{{ errorMsg }}</div> -->
+      </div>
+  
+      <div class="button-actions box">
+        <button pi-button (click)="closeDialog()" color="subtle">Cancel</button>
+  
+        <button pi-button color="primary" (click)="saveUser()"  [disabled]="disablesSave">
+          Add Subscription
+        </button>
+      </div>
+    </div>
+  </div>

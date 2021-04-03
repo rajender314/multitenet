@@ -1,0 +1,84 @@
+ 
+
+<div>
+	<div class="user-access-details user-profile-alignment-view d-flex">
+		<aside>
+			<div class="user-contact-details ">
+				<div class="user-access-body-sec" style="max-width: 525px;">
+					<div class="user-access-body d-flex">
+						<div class="user-access-item">
+							<div fxFlex>
+								<div fxLayout="row" [class.user-header]="permission.level==1">
+									<div fxFlex="70">
+										<!-- <h3 style="padding-left: 8px; font-weight: 400; font-size: 16px;"
+											*ngIf="permission.level == 1">{{permission.name}}</h3> -->
+										<div class="permission-name" *ngIf="permission.level != 1"
+											[ngClass]="{'child-level':permission.level == 3 }">{{permission.name}}</div>
+									</div>
+									<div flex="20" fxLayoutAlign="top right" style="margin-left: 115px;">
+										<!--<h4 *ngIf="permission.type == 'label'" class="">Permissions</h4>-->
+										<div *ngIf="permission.type != 'label'"
+											[ngClass]="{'child-check-level':permission.level == 3}">
+											<mat-form-field class="custom-input permission"
+												*ngIf="permission.type === 'select'" floatLabel="never">
+												<mat-select placeholder="Select permission"
+													[(ngModel)]="permission.selectedValue"
+													(change)="check(permission, permission.selectedValue)">
+													<mat-option *ngFor="let option of permission.options"
+														[value]="option.id">
+														{{ option.name }}
+													</mat-option>
+												</mat-select>
+											</mat-form-field>
+											<mat-radio-group class="example-radio-group"
+												*ngIf="permission.type === 'radio'"
+												[(ngModel)]="permission.selectedValue">
+												<mat-radio-button (click)="check(permission, permission.selectedValue)"
+													class="permission" *ngFor="let option of permission.options"
+													[value]="option.id">
+													{{option.name}}
+												</mat-radio-button>
+											</mat-radio-group>
+											<div *ngIf="permission.type === 'check'">
+												<div *ngFor="let option of permission.options">
+													<mat-checkbox [checked]="permission.checked" style="display: block;"
+														(change)="check(permission, option.id)" class="example-margin">
+														{{option.name}}</mat-checkbox>
+
+													<!-- <span class="right-sec">
+							<mat-button-toggle-group
+								name="fontStyle"
+								aria-label="Font Style" (change)="check(permission, option.id)">
+								<mat-button-toggle
+									value="yes" [checked]="permission.checked">
+									Yes 
+								</mat-button-toggle>
+								<mat-button-toggle
+									value="no">
+									No
+								</mat-button-toggle>
+							</mat-button-toggle-group>
+						</span> -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div *ngIf="permission.children" class="permission-block">
+									<div
+										[hidden]="(permission.type == 'check' && !permission.checked) || ((permission.type == 'select' || permission.type == 'radio') && permission.selectedValue != 1)">
+										<app-permissions *ngFor="let child of permission.children; let i = index"
+										(emitPermissionData)="permissionData($event)"	[permission]="child" [class.child-permission-border]="permission.level > 2"
+											class="child-permission"></app-permissions>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</aside>
+	</div>
+</div>

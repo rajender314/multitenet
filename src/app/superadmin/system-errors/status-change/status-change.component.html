@@ -1,0 +1,8 @@
+<mat-form-field>
+    <mat-select [(ngModel)]="selected" >
+      <mat-option *ngFor="let status of statuses" (click)="changeStatus(status.value)" [value]="status.value">
+        {{status.viewValue}}
+      </mat-option>
+    </mat-select> 
+  </mat-form-field>
+  

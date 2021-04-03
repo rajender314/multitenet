@@ -1,0 +1,19 @@
+<section>
+    <nav>
+        <div class="section-title">
+          <div class="icon-tile"><i class="product-icon icon-setting"></i></div>
+          <h2>Super Admin</h2>
+        </div>
+        <ul class="menu-list">
+            <li routerLink="settings" routerLinkActive="active"><i class="product-icon icon-setting"></i>General Settings</li>
+            <li routerLink="email-controller" routerLinkActive="active"><i class="product-icon icon-email"></i>Email Controller</li>
+            <li routerLink="email-details" routerLinkActive="active"><i class="product-icon icon-sent-mail"></i>Sent Mail</li>
+            <li routerLink="user-logs" routerLinkActive="active"><i class="product-icon icon-users"></i>User Logs</li>
+            <li routerLink="system-errors" routerLinkActive="active"><i class="product-icon icon-warning"></i>System Errors</li>
+            <!-- <li routerLink="subscriptions" routerLinkActive="active"><i class="product-icon icon-warning"></i>Subscriptions</li> -->
+        </ul>
+    </nav>
+    <article>
+        <router-outlet></router-outlet>
+    </article>
+</section>

@@ -1,0 +1,272 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  /* Style the header */
+  header {
+    background-color: #666;
+    padding: 30px;
+    text-align: center;
+    font-size: 35px;
+    color: white;
+  }
+  
+  /* Create two columns/boxes that floats next to each other */
+  nav {
+    float: left;
+    width: 10%;
+    height: 1000px; /* only for demonstration, should be removed */
+    background-color: #f6f7fe;
+    padding: 10px;
+  }
+  
+  /* Style the list inside the menu */
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  article {
+    float: left;
+    padding: 10px;
+    width: 90%; 
+    background-color: #fff;
+    flex-grow: 1;
+    overflow: hidden;
+    height: 1000px; /* only for demonstration, should be removed */
+  }
+  
+  /* Clear floats after the columns */
+  section:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  li {
+      display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+  }
+  
+  
+  /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+  @media (max-width: 600px) {
+    nav, article {
+      width: 100%;
+      height: auto;
+    }
+  }
+  .instance-delete{
+      float: right;
+      color: #aba3a3;
+      margin-left: 20px;
+  }
+  .instance-delete:hover{
+    color: #151414;
+}
+
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background: #0747a6;
+  color: #fff;
+  padding: 12px 20px; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+.invalid-feedback{
+  color: red !important;
+  font-size: 13px;
+}
+ul {
+  list-style-type: none;
+}
+.divlayout{
+  width: 40%;
+  background-color: #ccc;
+  margin-bottom: 5px;
+  padding: 10px 10px;
+  border: 3px solid #73AD21;
+}
+.editform {
+  padding: 0px 0 0 30px;
+  display: block;
+  margin-top: 0em;
+}
+.add-instance-stepper-form{
+  padding: 0px 0 0 30px;
+}
+p span 
+{
+    display: block;
+}
+.cancel {
+  background: rgba(179,212,255,.6);
+    color: #0052cc;
+    padding: 12px 20px; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.error-message {
+  padding-bottom: 15px;
+}
+mat-form-field {
+  width: calc(100% - 2.5rem); 
+  font-size: 16px;
+}
+mat-label {
+  font-size: 16px;
+}
+.forsubmit[disabled] {
+  background-color: #9e9597
+}
+.forsubmit[disabled]:hover {
+  background-color: #9e9597
+}
+
+.mat-dialog-content{
+  .mat-stepper-horizontal{
+    .mat-horizontal-stepper-header{
+      .mat-step-icon-state-number{
+        display: none;
+      }
+      .mat-step-label{
+        font-weight: 700;
+              opacity: 1;
+              color: #465570;
+              min-width: 90px;
+              &.mat-step-label-active{
+                color: #1E51CC;  
+              }
+      }
+    }
+    .mat-stepper-horizontal-line{
+      display: none;
+    }
+  }
+  .errorMsg-class {
+    color: #f44336;
+    top: 39px;
+    position: relative;
+  }
+}
+.features{
+  .side-title{
+    padding-top: 18px;
+    // @include semiBoldFont;
+    font-weight: 600;
+    font-size: 14px;
+  }
+}
+.upload-btn-wrapper {
+  position: relative;
+  // overflow: hidden; 
+  display: inline-block;
+  width: 100%;
+  img{
+    width: 100%;
+    height: auto;
+  }
+  .uploader-image{
+    height: 200px;
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .change-logo-text{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    /* padding-bottom: 20px; */
+    padding: 10px;
+    background: #ccc;
+    color: #ffffff;
+    font-size: 16px;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  .delete-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: 1px solid #3e3e3e;
+    overflow: hidden;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    i {
+      font-size: 21px;
+      background: #fff;
+      width: 21px;
+      height: 21px;
+      line-height: 21px;
+    }
+  }
+  &:hover{
+    .change-logo-text{
+      opacity: 1;
+      transition: all 0.3s ease-in-out;
+      -webkit-transition: all 0.3s ease-in-out;
+    }
+    .delete-icon {
+      opacity: 1;
+      transition: all 0.3s ease-in-out;
+      -webkit-transition: all 0.3s ease-in-out;
+    }
+  }
+}
+
+.btn {
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+} 
+
+.upload-btn-wrapper input[type=file] {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  opacity: 0; 
+  right: 0;
+  width: 100%;
+  cursor: pointer;
+  &.change-image-input{
+    top: 160px;
+    cursor: pointer;
+  }
+}

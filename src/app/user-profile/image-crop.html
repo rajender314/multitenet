@@ -1,0 +1,40 @@
+<!-- <image-cropper
+  [imageChangedEvent]="data.imageChangedEvent"
+  [maintainAspectRatio]="true"
+  [aspectRatio]="1/1"
+  [resizeToWidth]="175"
+  roundCropper="true"
+  format="png"
+  (imageCropped)="imageCropped($event)"
+></image-cropper>
+<button class="text-button" [mat-dialog-close]>Cancel</button>
+<button mat-button [mat-dialog-close]="data" cdkFocusInitial>Save</button> -->
+<div class="image-cropper-dialog">
+  <div class="mat-dialog-heading  dialog-header-actions"><h2 mat-dialog-title>Crop Image</h2></div>
+
+  <div class="mat-dialog-content d-flex flex-column w-100 one-field-dialog">
+    <!-- <div class="loader-new no-data-inner" *ngIf="loader"><span></span></div> -->
+
+    <image-cropper
+      [imageChangedEvent]="data.imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1/1"
+      [resizeToWidth]="175"
+      roundCropper="true"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+    ></image-cropper>
+  </div>
+
+  <div class="btn-actions dialog-footer-actions">
+    <div class="left-actions">
+      <!-- <mat-error>{{ errorMessage }}</mat-error> -->
+    </div>
+    <div class="right-actions">
+      <button class="text-button" [mat-dialog-close]>Cancel</button>
+      <button class="primary-button" pi-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>
+        Save
+      </button>
+    </div>
+  </div>
+</div>

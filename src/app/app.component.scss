@@ -1,0 +1,124 @@
+.app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+
+  .app-container {
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+
+    ::ng-deep.app-container {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      overflow: auto;
+    }
+  }
+}
+
+.app-container {
+  &.menuOpen {
+    .pi-master-detail-view {
+      &.toggle-section {
+        transition: 0.3s all ease-in-out;
+        padding-left: 240px;
+      }
+    }
+  }
+
+  &.thirdNavExist.thirdNavRegion {
+    .pi-master-detail-view {
+      &.toggle-section {
+        transition: 0.3s all ease-in-out;
+        padding-left: 232px;
+      }
+    }
+  }
+
+  &.thirdNavExist {
+    .pi-master-detail-view {
+      &.toggle-section {
+        transition: 0.3s all ease-in-out;
+        padding-left: 20px;
+      }
+    }
+  }
+
+  .pi-master-detail-view {
+    transition: 0.3s all ease-in-out;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    flex-direction: column;
+
+    ::ng-deep.app-header {
+      height: 60px;
+      width: 100%;
+    }
+  }
+}
+
+.fa {
+  vertical-align: middle;
+}
+
+.main-loading {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+
+  .mat-spinner {
+    width: 40px;
+    height: 40px;
+
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+
+.app-container.thirdNavExist.thirdNavRegion .m-plan-dview {
+  transition: 0.3s all ease-in-out;
+  padding-left: 215px;
+}
+
+.app-container.thirdNavExist:not(.thirdNavRegion) .m-plan-dview {
+  transition: 0.3s all ease-in-out;
+  padding-left: 5px;
+}
+
+.app-container.thirdNavExist.thirdNavRegion .store-copy-dview {
+  transition: 0.3s all ease-in-out;
+  padding-left: 236px;
+}
+
+.app-container.thirdNavExist:not(.thirdNavRegion) .store-copy-dview {
+  transition: 0.3s all ease-in-out;
+  padding-left: 20px;
+}
+
+.app-container.thirdNavExist.thirdNavRegion .product-dview {
+  transition: 0.3s all ease-in-out;
+  padding-left: 236px;
+}
+
+.app-container.thirdNavExist:not(.thirdNavRegion) .product-dview {
+  transition: 0.3s all ease-in-out;
+  padding-left: 20px;
+}
+
+.app-container.thirdNavExist .ads-over-view {
+  z-index: 2;
+}

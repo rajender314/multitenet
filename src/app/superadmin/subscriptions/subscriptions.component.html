@@ -1,0 +1,394 @@
+<section>
+    <div class="over-view pi-master-detail-view">
+        <div class="overview-nav-view pi-master-view">
+            <div class="users-list-view">
+                <div class="user-actions">
+                    <div class="user-nav d-flex">
+
+                        <h2><i class="product-icon icon-users"></i> Subscriptions</h2>
+                        <div class="plus-actions d-flex justify-content-end" title="Add" (click)="addUser()">
+                            <i class="icon-add material-icons">add</i>
+                        </div>
+
+                    </div>
+                    <div class="user-roles-search">
+                        <div class="search">
+                            <div class="left-search">
+                                <div class="searc-ui">
+                                    <span class="search-icon">
+                                        <i class="product-icon icon-search"></i>
+                                    </span>
+                                    <span class="serch-item">
+                                        <input type="text" autocomplete="off" (keyup)="searchUser($event.target.value)"
+                                            class="searchbox" name="search" placeholder="Search" [(ngModel)]="search">
+                                        <mat-spinner *ngIf="isLoading && search?.length>0" diameter="18"></mat-spinner>
+                                        <mat-icon *ngIf="search?.length>0" class="close-icon" (click)="clearSearch()">
+                                            close</mat-icon>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="head">
+                        <div matBadgeOverlap="false" matBadgePosition="before" class="mat-badge-center">
+                            <span [matMenuTriggerFor]="statusFilter" matTooltip="{{usersList.length}} {{this.selectedStatusType}} Subscriptions">
+                                <span >{{usersList.length}} {{this.selectedStatusType}} Subscriptions</span>
+                                <mat-icon>expand_more</mat-icon>
+                            </span>
+                            <mat-menu #statusFilter="matMenu" [overlapTrigger]="false" yPosition="below"
+                                xPosition="before">
+                                <button mat-menu-item (click)="onApplyFilter('status', 0)">All</button>
+                                <button mat-menu-item (click)="onApplyFilter('status', 1)">Active</button>
+                                <button mat-menu-item (click)="onApplyFilter('status', 2)">Inactive</button>
+                            </mat-menu>
+                        </div>
+                        <div class="sorting">
+                            <span class="sort-action {{sortBy | lowercase}}"
+                                (click)="onApplyFilter('sort')">{{sortBy}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div 
+                class="list-items">
+                <div class="users-side-menu">
+                    <div class="user-list-template">
+                        <div class="users-list-data" *ngFor="let instance of usersList; let i = index"
+                            (click)="getSelectedList(instance,i)" [title]="instance.name"
+                            [ngClass]="{'active': instance==selectedUser}">
+                            <div class="user-image" [style.backgroundImage]="'url('+ instance.attachment_url +')'">
+                                <!-- <span *ngIf="!instance.attachment_url"
+                                    class="placeholder-text">{{instance.name}}</span> -->
+                            </div>
+
+                            <div class="user-avatar-details">
+                                <p class="user-name">{{instance.name}}</p>
+                                <p class="user-email"></p>
+                            </div>
+                        </div>
+                        <div class="no-records" *ngIf="!isLoading && usersList.length==0">
+                            <p>No Subscriptions Found. . .</p>
+                        </div>
+                        <mat-spinner diameter="32" *ngIf="isLoading" class="center-spinner"></mat-spinner>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="pi-detail-view">
+            <mat-spinner diameter="32" *ngIf="isLoading" class="center-spinner"></mat-spinner>
+            <mat-spinner *ngIf="showSpinner" diameter="30"></mat-spinner>
+
+            <div class="no-records" *ngIf="!isLoading && usersList?.length==0">
+                <p>No Subscriptions Found. . .</p>
+            </div>
+            <div class="product-side-window" *ngIf="usersList?.length!=0">
+                <div class="sticky-layout">
+                    <div>
+                        <div class="user-profile">
+                            <header>
+                                <div class="mini-screen d-flex align-items-center justify-content-between">
+                                    <div class="left-headding flex-width">
+                                        <div class="profile-detail-header d-flex">
+                                            <span class="user-profile-name"
+                                                *ngIf="selectedUser">{{selectedUser.name}}</span>
+                                            <span class="user-profile-email"
+                                                *ngIf="selectedUser">{{selectedUser.email}}</span>
+                                        </div>
+
+                                    </div>
+                                    <div
+                                        class="right-headding d-flex align-items-center  justify-content-end flex-width">
+                                        <!-- <button class="muted-button ak-button ak-button__appearance-default "> Reset Password </button> -->
+                                    </div>
+
+                                </div>
+                            </header>
+                            <div class="user-detail-body-content m-b-16">
+                                <div class="user-profile-naviagtion">
+                                    <div class="user-profile-group ">
+                                        <div label="User Details">
+                                            <div class="user-profile-tab">
+                                                <div class="user-tab-content">
+                                                    <div class="mini-screen">
+
+                                                        <form [formGroup]="formdata" class="editform">
+                                                            <h4 class="product-header">Subscription Details</h4>
+                                                            <div
+                                                                class="user-profile-details user-profile-alignment-view d-flex">
+                                                                <aside class="d-flex">
+                                                                    <div class="user-contact-details ">
+                                                                       
+                                                                        <div class="user-detail-view email col-12">
+
+                                                                            <pi-form-field >
+                                                                                    <label class="label-name">
+                                                                                            Name
+                                                                                          <span class="required">*</span>
+                                                                                        </label>
+                                                                                <input pi-input autocomplete="off"
+                                                                                    required formControlName="name"
+                                                                                    placeholder="Name"
+                                                                                    (keyup)="valueChanged()">
+                                                                                <div
+                                                                                    *ngIf="isSubmited && f.name.errors?.required">
+                                                                                    <mat-error>Please enter
+                                                                                        Name
+                                                                                    </mat-error>
+                                                                                  
+                                                                                </div>
+                                                                                <div
+                                                                                    *ngIf="isSubmited && f.name.errors?.maxlength">
+                                                                                    <mat-error> <span
+                                                                                            class="capitalize">Name</span>
+                                                                                        should not exceed 255 characters
+                                                                                    </mat-error>
+                                                                                </div>
+                                                                               
+                                                                            </pi-form-field>
+                                                                        </div>
+                                                                        <div class="user-detail-content col-6">
+                                                                            <pi-form-field >
+                                                                                    <label class="label-name">
+                                                                                            Price
+                                                                                          <span class="required">*</span>
+                                                                                        </label>
+                                                                              <input pi-input (keyup)="valueChanged()" autocomplete="off" required formControlName="price" placeholder="Price">
+                                                                              <div *ngIf="isSubmited && f.price.errors?.required">
+                                                                                <mat-error>Please enter Price</mat-error>
+                                                                              </div>
+                                                                              <div *ngIf="isSubmited && f.price.errors?.maxlength">
+                                                                                <mat-error> <span class="capitalize">Last
+                                                                                    name</span> should not exceed 255 characters</mat-error>
+                                                                              </div> 
+                                                                            </pi-form-field>
+                                                                      
+                                                                      
+                                                                          </div>
+
+
+                                                                          <div class="user-detail-view d-flex ">
+                                                                            <div class="user-detail-content col-12">
+                                                                                <div class="role-select ">
+                                                                                        <pi-form-field >
+                                                                                                <label class="label-name">
+                                                                                                        Price Currency
+                                                                                                      <span class="required">*</span>
+                                                                                                    </label>
+                                                                                    <pi-select style="text-transform:capitalize;" (click)="valueChanged()" [options]="priceCurrency || []" formControlName="price_currency"
+                                                                                   >
+                                                                                  </pi-select>
+                                                                                  </pi-form-field>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                          <div class="user-detail-content col-6">
+                                                                            <pi-form-field >
+                                                                                    <label class="label-name">
+                                                                                            Duration Period
+                                                                                          <span class="required">*</span>
+                                                                                        </label>
+                                                                              <input pi-input autocomplete="off" (keyup)="valueChanged()" required formControlName="duration_period" placeholder="Duration period">
+                                                                              <div *ngIf="isSubmited && f.duration_period.errors?.required">
+                                                                                <mat-error>Please enter Duration period</mat-error>
+                                                                              </div>
+                                                                              <div *ngIf="isSubmited && f.duration_period.errors?.maxlength">
+                                                                                <mat-error> <span class="capitalize">Duration period</span> should not exceed 255 characters</mat-error>
+                                                                              </div> 
+                                                                            </pi-form-field>
+                                                                      
+                                                                          </div>
+                                                                          
+                                                                          <div class="user-detail-view d-flex ">
+                                                                            <div class="user-detail-content col-12">
+                                                                                <div class="role-select ">
+                                                                                        <pi-form-field >
+                                                                                                <label class="label-name">
+                                                                                                        Period Type
+                                                                                                      <span class="required">*</span>
+                                                                                                    </label>
+                                                                                    <pi-select style="text-transform:capitalize;" (click)="valueChanged()" [options]="periodType || []" formControlName="period_type"
+                                                                                    >
+                                                                                  </pi-select>
+                                                                                  </pi-form-field>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="user-detail-view d-flex ">
+                                                                            <div class="user-detail-content col-12">
+                                                                                <div class="role-select ">
+                                                                                        <pi-form-field >
+                                                                                                <label class="label-name">
+                                                                                                        Status
+                                                                                                      <span class="required">*</span>
+                                                                                                    </label>
+                                                                                    <pi-select
+                                                                                        style="text-transform:capitalize;"
+                                                                                        [options]="statusRolesList || []"
+                                                                                        formControlName="status"
+                                                                                        (click)="valueChanged()">
+                                                                                    </pi-select>
+                                                                                    </pi-form-field>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- <div class="user-logo">
+                                                                        <div class="image-upload d-flex">
+                                                                            <div class="personal-details-img-sec">
+                                                                                <div class="rounded-circle"
+                                                                                    style="height:125px;background-size: 100%;background-position: 50% 50%; background-repeat: no-repeat;"
+                                                                                    [ngStyle]="{
+                                                                                                            'background-image': 'url(' + logoUrl + ')'
+                                                                                                          }">
+                                                                                    <img [src]="logoUrl" [hidden]="true"
+                                                                                        (error)="isProfilePicLoaded(false)"
+                                                                                        (load)="isProfilePicLoaded(true)" />
+                                                                                    <div class="img-content">
+                                                                                        <div class="upload-remove-img">
+                                                                                            <div class="camera-icon">
+                                                                                                <i
+                                                                                                    class="pixel-icons icon-camera"></i>
+                                                                                            </div>
+
+                                                                                            <div *ngIf="selectedUser?.attachment_url"
+                                                                                                (click)="saveUserProfilePic('delete')"
+                                                                                                class="delete-icon"
+                                                                                                title="Delete">
+                                                                                                <i
+                                                                                                    class="pixel-icons icon-delete"></i>
+                                                                                            </div>
+                                                                                            <p *ngIf="selectedUser?.attachment_url"
+                                                                                                class="change-label-text hover-field">
+                                                                                                Change Image</p>
+                                                                                            <p *ngIf="!selectedUser?.attachment_url"
+                                                                                                class="change-label-text">
+                                                                                                Add Image</p>
+                                                                                          
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="input-field"
+                                                                                        [ngClass]="{'change-image-input': logoUrl.length > 0 }"
+                                                                                        (click)="addImage($event)">
+                                                                                        <input type="file" id="addImage"
+                                                                                            class="input-field"
+                                                                                            [ngClass]="{'change-image-input': logoUrl.length > 0 }"
+                                                                                            style="display:none"
+                                                                                            ng2FileSelect
+                                                                                            [uploader]="uploader"
+                                                                                            accept="image/x-png,image/gif,image/jpeg" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="change-user-file">
+                                                                                <span *ngIf="uploadError"
+                                                                                    class="error-msg error-strip">*You
+                                                                                    have selected an invalid
+                                                                                    file type. Only jpg, jpeg, png files
+                                                                                    are
+                                                                                    allowed.</span>
+                                                                            </div>
+                                                                            <div class="change-user-file">
+                                                                                <span *ngIf="sizeError"
+                                                                                    class="error-msg error-strip">*File
+                                                                                    more than 5MB is not
+                                                                                    allowed.</span>
+                                                                            </div>
+
+                                                                            <div class="images">
+                                                                                <ul *ngIf="uploads.length">
+                                                                                    <li *ngFor="let file of uploads; let i = index"
+                                                                                        [ngStyle]="{ 'background-image': 'url(' + file?.file_name + ')' }">
+                                                                                        <div class="overlay"></div>
+                                                                                        <mat-icon class="delete">
+                                                                                            delete</mat-icon>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> -->
+                                                                </aside>
+                                                            </div>
+                                                            <h4 class="product-header">Access Features</h4>
+                                                            <!-- <div formArrayName="features">
+                                                                <div class="user-access-details user-profile-alignment-view d-flex"
+                                                                    *ngFor="let instance of instancesList;let i=index"
+                                                                    [formGroupName]="i">
+                                                                    <aside>
+                                                                        <div class="user-contact-details ">
+                                                                            <div class="user-access-body-sec">
+                                                                                <div class="user-access-body d-flex">
+                                                                                    <div class="user-access-item">
+                                                                                        <span class="left-sec">
+                                                                                            <span class="instance-logo"
+                                                                                                [ngClass]="{'no-border1': !instance.instancelogoUrl}">
+                                                                                                <img *ngIf="instance.instancelogoUrl"
+                                                                                                    [src]="instance.instancelogoUrl"
+                                                                                                    (error)="displayDefaultImage($event)" />
+                                                                                                <pi-icon
+                                                                                                    class="xs square"
+                                                                                                    *ngIf="!instance.instancelogoUrl"
+                                                                                                    background="#3DC4A6">
+                                                                                                    <i
+                                                                                                        class="product-icon icon-instances"></i>
+                                                                                                </pi-icon>
+                                                                                            </span>
+
+                                                                                            <span
+                                                                                                class="item-name">{{instance.name}} -- {{instancesList[i]?.code}}</span>
+                                                                                        </span>
+                                                                                        <span class="right-sec">
+                                                                                            <mat-button-toggle-group
+                                                                                                name="fontStyle"
+                                                                                                aria-label="Font Style"
+                                                                                                [formControlName]="instancesList[i]?.code">
+                                                                                                <mat-button-toggle
+                                                                                                    value="yes"
+                                                                                                    (click)="valueChanged()">
+                                                                                                    Yes 
+                                                                                                </mat-button-toggle>
+                                                                                                <mat-button-toggle
+                                                                                                    value="no"
+                                                                                                    (click)="valueChanged()">
+                                                                                                    No
+                                                                                                </mat-button-toggle>
+                                                                                            </mat-button-toggle-group>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </aside>
+                                                                </div>
+                                                            </div> -->
+                                                       
+                                                        </form>
+
+                                                        <app-permissions  *ngFor="let parent of globalPermissions; let i = index" [permission]="parent"
+                                                         (emitPermissionData)="permissionData($event)" >
+                                                        </app-permissions>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <footer class=" w-100 d-flex  justify-content-end align-items-center ">
+                                <div class="mini-screen inner-footer justify-content-end d-flex">
+                                    <button class="text-button" (click)="resetForm()">Cancel</button>
+                                    <button class="primary-button m-l-15" pi-button color="primary" (click)="saveSubscription()"
+                                        [disabled]="disableSaveButton ||  isSaveAction ">
+                                        Save
+                                    </button>
+                                </div>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,48 @@
+@import "../../assets/styles/mixins";
+
+
+.tp-radio-group {
+    display: inline-flex;
+    flex-direction: column;
+ }
+ .tp-radio-button {
+    margin: 5px;
+    margin-bottom: 10px;
+ }
+ .tp-selected-value {
+    margin: 15px 0;
+ }
+ .mat-radio-inner-circle {
+   background-color: #3176d2 !important;
+ } 
+ .save-button {
+   text-transform: capitalize;
+   margin-right: 10px;
+   background-color: #3176d2;
+   color: white;
+   min-width: 84px;
+ }
+ .disble-button {
+   background-color: #a0b8e6 !important;
+   cursor: not-allowed;
+ }
+ h4{
+   font-size: 15px;
+   @include semiBoldFont;
+   margin-bottom: 16px;
+ }
+ .email-notifications-card{
+   border: 1px solid #DDDDDD;
+   border-top: 0;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+   width: 480px;
+   padding: 16px;
+   .action-btns {
+     height: 60px;
+     display: flex;
+     align-items: center;
+     justify-content: flex-end;
+     border-top: 1px solid #D7DDE7;
+     margin-top: 24px;
+   }
+ }

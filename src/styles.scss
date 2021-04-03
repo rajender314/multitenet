@@ -1,0 +1,219 @@
+/*
+ * Entry point of global application style.
+ * Component-specific style should not go here and be included directly as part of the components.
+ */
+
+// Theme variables, must be included before the libraries to allow overriding defaults
+@import "theme/theme-variables";
+
+// 3rd party libraries
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+// // ag grid styles
+
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+
+// @import "~bootstrap/scss/bootstrap";
+// @import '~perfect-scrollbar/css/perfect-scrollbar.css';
+// @import "~@fortawesome/fontawesome-free-webfonts/scss/fontawesome.scss";
+// @import "~@fortawesome/fontawesome-free-webfonts/scss/fa-brands.scss";
+// @import "~@fortawesome/fontawesome-free-webfonts/scss/fa-regular.scss";
+// @import "~@fortawesome/fontawesome-free-webfonts/scss/fa-solid.scss";
+
+// Theme customization
+@import "theme/grid";
+
+/* You can add global styles to this file, and also import other style files */
+@import "theme/_config"; //site related UI config
+@import "theme/_breakpoints"; //for responsive related break points
+@import "theme/_buttons"; // for Buttons
+@import "theme/_form"; // form related UI.
+@import "theme/_mixins"; //
+@import "theme/_fonts"; //
+@import "theme/_flex"; //
+@import "theme/_users";
+@import "theme/_layout"; //
+@import "theme/_global"; //
+@import "theme/_modal";
+@import "theme/_common";
+@import "theme/productization-fonts";
+@import "theme/perfect-scrollbar";
+
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  @include regular-font;
+  cursor: default;
+  color: #56647d;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  &.g-fonts {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+  }
+
+  &.os-fonts {
+    font-family: -apple-system, BlinkMacSystemFont, Archivo, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-weight: normal;
+  }
+}
+
+h1 {
+  @include font-size-large;
+}
+[hidden] {
+  display: none !important;
+}
+.right-header .mat-button-toggle-label-content {
+  opacity: 0.7;
+  @include mediumFont;
+  font-size: 14px;
+  // color: #080b36;
+  letter-spacing: 0;
+  /*  */
+  line-height: 30px !important;
+  width: 64px;
+}
+
+.padding-0 {
+  padding: 0px !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar:hover {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f2f2f2;
+  border-radius: 4px;
+}
+
+.slid-content {
+  ::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &:hover {
+    ::-webkit-scrollbar-thumb {
+      background-color: #b0b0b0;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f2f2f2;
+    }
+  }
+}
+
+.scroll-on-hover,
+.chipset-tile {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    border-radius: 6px
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+  }
+
+  &:hover {
+    &::-webkit-scrollbar-track {
+      background: #f2f2f2;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #aaa;
+    }
+  }
+}
+.search-box{
+  position: relative;
+  input{
+    padding: 8px 16px 8px 30px;
+  }
+  i.product-icon.icon-search {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    font-size: 16px;
+  }
+}
+.job_status {
+  background: #f7f7f7;
+  position: relative;
+  vertical-align: middle;
+  border-radius: 3px;
+  display: inline-block;
+  padding: 1px 6px;
+  color: #4781D5;
+  line-height: 18px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  &.active{
+    background: #D2E4FF;
+    color: #4781D5;
+  }
+  &.inactive{
+    background: #DFE4EC;
+    color: #949BA4;
+  }
+  &.inprogress{
+    background: #F0F3FE;
+    color: #1021A0;
+  }
+}
+// .ngxImageZoomContainer{
+//   margin: inherit !important;
+// }
+/*Color Picker Global css */
+.color-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  label{
+    font-size: 14px;
+    color: #8b95a6;
+    letter-spacing: -0.12px;
+    text-align: left;
+    text-transform: capitalize;
+    @include semiBoldFont;
+  }
+  .color_picker{
+    width: 14px;
+    height: 16px;
+    input{
+      width: 100%;
+      height: 100%;
+      border: 1px solid #989898;
+      border-radius: 3px;
+    }
+  }
+}

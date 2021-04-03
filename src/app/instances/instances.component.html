@@ -1,0 +1,315 @@
+<div class="global-grid-view">
+  <div class="section-header">
+      <!-- <i class="product-icon icon-instances"></i> -->
+      <h2 class="heading">Instances</h2>
+      <div class="nav-sec">
+        <div class="search-sec">
+            <div class="search">
+                <!-- <div class="left-search">
+                  <div class="searc-ui">
+                    <span class="search-icon">
+                      <i class="product-icon icon-search"></i>
+                    </span>
+                    <span class="serch-item">
+                      <input type="text" (keyup)="searchUser($event.target.value)" class="searchbox" name="search"
+                        placeholder="search" [(ngModel)]="search">
+                    </span>
+                  </div>
+                </div> -->
+                <pi-form-field label="" leftIcon="true">
+                    <pi-icon name="icon-search"></pi-icon>
+                    <input type="text" pi-input autocomplete="off" (keyup)="searchInstance($event.target.value)" [(ngModel)]="search" placeholder="Search"/>
+                    <mat-spinner *ngIf="isLoading && search?.length>0" diameter="18"></mat-spinner>
+                    <mat-icon *ngIf="search?.length>0" class="close-icon" (click)="clearSearch()">close</mat-icon>
+                    <!-- <i class="pixel-icons icon-close close-icon"></i> -->
+                </pi-form-field>
+              </div>
+        </div>
+        <button class="primary-button m-l-15" pi-button color="primary" (click)="addInstance()">
+            Add Instance
+          </button>
+      </div>
+  </div>
+  <ag-grid-angular *ngIf="!noDataFound" style="width: 100vw;max-width: 1160px;margin: 0 auto; height: calc(100vh - 120px);" class="ag-theme-balham ag-grid-email" [rowData]="instancesList"
+    [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true" [getRowHeight]="getRowHeight"
+    [rowSelection]="rowSelection" (rowSelected)="onRowSelected($event)" [pagination]="false">
+  </ag-grid-angular>
+  <div class="no-data-grid" *ngIf="noDataFound">
+    <p> No Instances Found</p>
+  </div>
+</div>
+<!-- <span>
+  <span><input type="text" (keyup)="searchInstance($event.target.value)" class="searchbox" name="search"
+      placeholder="Search Instance" [(ngModel)]="search"></span>
+  <button mat-raised-button color="primary" (click)="addInstance()" style="float: right;background-color: #3176d2;">
+    <mat-icon title="Add Instance">add</mat-icon> Add Instance
+  </button>
+</span>
+
+<ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-balham ag-grid-email" [rowData]="instancesList"
+  [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true" [getRowHeight]="getRowHeight"
+  [rowSelection]="rowSelection" (rowSelected)="onRowSelected($event)" [pagination]="false">
+</ag-grid-angular> -->
+<!-- <section>
+  <nav>
+    <span><input type="text" (keyup)="searchInstance($event.target.value)" class="searchbox" name="search"
+        placeholder="search" [(ngModel)]="search"></span>
+    <div class="head">
+      <div matBadgeOverlap="false" matBadgePosition="before" class="mat-badge-center">
+        <span [matMenuTriggerFor]="statusFilter">
+          <span>{{instacesList.length}} {{this.selectedStatusType}} Instances</span>
+          <mat-icon>expand_more</mat-icon>
+        </span>
+        <mat-menu #statusFilter="matMenu" [overlapTrigger]="false" yPosition="below" xPosition="before">
+          <button mat-menu-item (click)="onApplyFilter('status', 0)">All</button>
+          <button mat-menu-item (click)="onApplyFilter('status', 1)">Active</button>
+          <button mat-menu-item (click)="onApplyFilter('status', 2)">InActive</button>
+        </mat-menu>
+      </div>
+      <div class="sorting">
+        <span class="sort-action {{sortBy | lowercase}}" (click)="onApplyFilter('sort')">{{sortBy}}</span>
+      </div>
+    </div>
+    <div class="d-flex align-center justify-content-center w-100" *ngIf="isLoading"
+      style="height: 80%;flex: 1;justify-content: center;align-items: center;">
+      <mat-spinner diameter="24" class="md"></mat-spinner>
+
+    </div>
+    <mat-list>
+      <mat-list-item *ngFor="let instance of instacesList; let i = index" routerLink="/instances/{{instance.id}}"
+        (click)="getSelectedList(instance,i)" [title]="instance.name"
+        [ngClass]="{'active': instance==selectedInstance}">
+        {{instance.name}}
+      </mat-list-item>
+    </mat-list>
+    <div class="no-records" *ngIf="instacesList.length==0">
+      <p>No Records Found. . .</p>
+    </div>
+  </nav>
+  <article>
+    <div *ngIf="instacesList.length>0">
+      <button mat-raised-button color="primary" (click)="addInstance()" style="float: right;background-color: #3176d2;">
+        <mat-icon title="Add Instance">add</mat-icon> Add Instance
+      </button>
+
+      <h1 class="instance-name" *ngIf="selectedInstance">Instances </h1>
+      <h1 class="instance-name" *ngIf="selectedInstance">{{selectedInstance.name}} </h1>
+
+
+      <div class="container">
+        <div class="tab-slider--nav">
+          <ul class="tab-slider--tabs">
+            <li style="background-color: #d8cbcb; color:white;" class="tab-slider--trigger"
+              *ngFor="let tab of state.tabs" [class.active]="selectedTab == tab.id" rel="tab"
+              (click)="changeTab(tab.id)">{{tab.label}}</li>
+          </ul>
+        </div>
+        <div class="tab-slider--container" [ngSwitch]="selectedTab">
+          <div id="tab1" class="tab-slider--body" *ngSwitchCase="1">
+            <form [formGroup]="formdata" class="editform" (ngSubmit)="saveInstance(formdata.value,'details')">
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Instance Name</mat-label>
+                    <input matInput autocomplete="off" (keyup)="valueChanged()" required formControlName="name"
+                      placeholder="Instance Name">
+                  </mat-form-field>
+                </span>
+
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Instance URL</mat-label>
+                    <input matInput autocomplete="off" (keyup)="valueChanged()" required formControlName="url"
+                      placeholder="Instance URL">
+                  </mat-form-field>
+                </span>
+
+
+              </p>
+
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Database Name</mat-label>
+                    <input matInput autocomplete="off" (keyup)="valueChanged()" required formControlName="db_name"
+                      placeholder="Database Name">
+                  </mat-form-field>
+                </span>
+
+              </p>
+
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Database Username</mat-label>
+                    <input matInput autocomplete="off" (keyup)="valueChanged()" required formControlName="db_username"
+                      placeholder="Database Username">
+                  </mat-form-field>
+                </span>
+
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Database Password</mat-label>
+                    <input matInput type="pass" autocomplete="off" (keyup)="valueChanged()" required
+                      formControlName="db_password" placeholder="Database Password">
+                  </mat-form-field>
+                </span>
+
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Database Port</mat-label>
+                    <input matInput autocomplete="off" appNumbersOnly maxlength="4" (keyup)="valueChanged()"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      required formControlName="db_port" placeholder="Database Port">
+                  </mat-form-field>
+                </span>
+
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="status" (ngModelChange)="valueChanged()">
+                      <mat-option value="">Select Status</mat-option>
+                      <mat-option value="1">Active</mat-option>
+                      <mat-option value="0">InActive</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </span>
+
+              </p>
+              <p>
+                <span class="error-message" *ngIf="errorMessage">
+                  <div class="invalid-feedback">
+                    <div>{{errorMessage}}</div>
+                  </div>
+                </span>
+                <span><input type="submit" [disabled]="!formdata.valid || isSubmited || disableSaveButton"
+                    class="forsubmit" value="Save" [ngClass]="{'disable-save':disableSaveButton=='1'}"></span>
+              </p>
+
+            </form>
+          </div>
+          <div id="tab2" class="tab-slider--body" *ngSwitchCase="2">
+            <form [formGroup]="themeFormdata" class="themeform" (ngSubmit)="saveInstance(themeFormdata.value,'theme')">
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Primary Color</mat-label>
+                    <mat-select formControlName="primary_color">
+                      <mat-option *ngFor="let color of colors; let i = index" [(value)]="color.id">{{color.color}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Secondary Color</mat-label>
+                    <mat-select formControlName="secondary_color">
+                      <mat-option *ngFor="let color of colors; let i = index" [(value)]="color.id">{{color.color}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Header Color</mat-label>
+                    <mat-select formControlName="header_color">
+                      <mat-option *ngFor="let color of colors; let i = index" [(value)]="color.id">{{color.color}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Body Color</mat-label>
+                    <mat-select formControlName="body_color">
+                      <mat-option *ngFor="let color of colors; let i = index" [(value)]="color.id">{{color.color}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Footer Color</mat-label>
+                    <mat-select formControlName="footer_color">
+                      <mat-option *ngFor="let color of colors; let i = index" [(value)]="color.id">{{color.color}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <mat-form-field>
+                    <mat-label>Font Style</mat-label>
+                    <mat-select formControlName="font_style">
+                      <mat-option *ngFor="let familie of families; let i = index" [(value)]="familie.id">
+                        {{familie.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <span *ngIf="logoUrl">
+                    <img [src]="logoUrl" height="200" width="300">
+                  </span>
+                  <input type="file" id="files" ng2FileSelect [uploader]="uploaderLogo">
+                  <label for="files">Select file</label>
+                </span>
+              </p>
+              <p>
+                <span>
+                  <span *ngIf="loginBackUrl">
+                    <img [src]="loginBackUrl" height="200" width="300">
+                  </span>
+                  <input type="file" id="files" ng2FileSelect [uploader]="uploaderLoginBack">
+                  <label for="files">Select file</label>
+                </span>
+              </p>
+
+              <p>
+                <span class="error-message" *ngIf="errorMessage">
+                  <div class="invalid-feedback">
+                    <div>{{errorMessage}}</div>
+                  </div>
+                </span>
+                <span><input type="submit" class="forsubmit" value="Save"></span>
+              </p>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="no-records" *ngIf="instacesList.length==0">
+      <p>No Records Found. . .</p>
+    </div>
+    <div class="loading" *ngIf="isLoading">
+      <div class="loader">
+        <div class="d-flex align-center justify-content-center w-100"
+          style="height: 80%;flex: 1;justify-content: center;align-items: center;">
+          <mat-spinner diameter="24" class="md"></mat-spinner>
+        </div>
+      </div>
+
+
+    </div>
+  </article>
+</section> -->

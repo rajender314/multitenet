@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Web</title>
+  <base href='<?php echo config("constants.web_URL"); ?>'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="public/images/Expodite_Logo_menu.png">
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,500,600,700&display=swap" rel="stylesheet">
+  <!-- <link rel="shortcut icon" href="./resources/assets/js/storeProfilerDB/src/favicon.png" type="image/x-icon"/> -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script>
+      downloadFilePath = '<?php echo ''; //$download_mpgrid_export;  ?>';
+      redirectInClient = '<?php echo ''; //$sync_data_view_url;  ?>';
+      if (downloadFilePath != '') {
+          window.open(downloadFilePath, '_blank');
+      }
+      window['appSettings'] = {
+          user: {
+              name: '<?php echo ucfirst($user_info->result->data->first_name) . ' ' . ucfirst($user_info->result->data->last_name); ?>',
+              email: '<?php echo $user_info->result->data->email; ?>',
+              access_id: '<?php echo $user_info->result->data->access_id; ?>',
+              profile_url: '<?php echo $user_info->result->data->profile_url; ?>',
+              id: '<?php echo $user_info->result->data->id; ?>',
+              user_type: '<?php echo $user_info->result->data->user_type; ?>',
+              token: '<?php echo 'Bearer ' . $access_token; ?>',
+              isLoginCounts: '<?php echo isset($user_info->result->data->isLoginCounts) ? $user_info->result->data->isLoginCounts : ''; ?>',
+              remaningDays: '<?php echo isset($user_info->result->data->remaningDays) ? $user_info->result->data->remaningDays : ''; ?>',
+              isIdenttityExpired: '<?php echo isset($user_info->result->data->isIdenttityExpired) ? $user_info->result->data->isIdenttityExpired : ''; ?>',
+              module: '<?php echo 1; ?>',
+              switch_admin: '<?php echo 2; ?>'
+          },
+          from: {loginUrl: '<?php echo config("constants.app_url"); ?>'},
+          base_url: '<?php echo config("constants.API_URL"); ?>',
+          app_url: '<?php echo config("constants.web_URL"); ?>',
+          api_url: '<?php echo config("constants.API_URL"); ?>',
+          download_url: '<?php echo ''; //config("constants.download_url");  ?>',
+          default_client: <?php echo 1; //json_encode($default_client); ?>,
+          system_permissions: '<?php echo ''; //json_encode($system_permissions); ?>',
+          adjust_circulation: <?php echo 1; //isset($default_client->adjust_circulation) && !empty($default_client->adjust_circulation) ? 'true' : 'false';  ?>,
+          integrated_print_service: <?php echo 1; //isset($default_client->integrated_print_service) && !empty($default_client->integrated_print_service) ? 'true' : 'false';  ?>
+      };
+  </script>
+</head>
+<body>
+  <app-root>
+    <div class="loader"></div>
+  </app-root>
+</body>
+</html>

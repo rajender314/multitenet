@@ -1,0 +1,13 @@
+.snackbar-container{
+    .success{
+        display: flex;
+        align-items: center;
+        .mat-icon
+        {
+            margin-right: 8px;
+        }
+    }  
+} 
+.mat-snack-bar-container {
+    margin-top: 10px;
+}

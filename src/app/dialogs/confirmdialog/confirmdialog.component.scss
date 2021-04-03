@@ -1,0 +1,10 @@
+.my-centered-dialog {
+    max-width: 80vw;
+  
+    .mat-dialog-container {
+      max-width: none;
+    }
+  }
+  .mat-dialog-actions{
+justify-content: flex-end;
+} 

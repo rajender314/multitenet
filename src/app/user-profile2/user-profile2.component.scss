@@ -1,0 +1,37 @@
+
+#wrapper{
+    width: 100%;
+  }
+  #left {
+      float: left;
+      // width: 15%;
+      overflow: hidden;
+    }
+    
+    #right {
+      overflow: hidden;
+      .personal-details-form-sec{
+        margin-left: 20px;;
+      }
+    }
+    #change-password-left {
+      float: left;
+      width:50%;
+      overflow: hidden;
+    }
+    
+    #change-password-right {
+      overflow: hidden;
+    }
+    
+    span{
+      display: flex;
+      align-items: center;
+      /*margin-left: 4px;*/ 
+      cursor: pointer;
+      .mat-icon{
+          width: 20px;
+          height: 20px;
+          font-size: 20px;
+      }   
+  }

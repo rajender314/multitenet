@@ -1,0 +1,564 @@
+<div class="mat-dialog-heading">
+  <span class="close-dialog">
+    <em (click)="closeDialog()" class="pixel-icons icon-arrow-back"></em>
+  </span>
+
+  <h2 mat-dialog-title style="text-transform: capitalize;">{{data.title}}</h2>
+</div>
+<!-- <h1 mat-dialog-title style="text-transform: capitalize;"><b>{{data.title}}</b></h1> -->
+<div class="mat-dialog-content">
+  <mat-horizontal-stepper [linear]="isLinear" #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+      <form [formGroup]="firstFormGroup" class="editform add-instance-stepper-form">
+        <ng-template matStepLabel>Details</ng-template>
+        <div class="detail-sec d-flex">
+          <div class="left-sec">
+            <pi-form-field >
+                <label class="label-name">
+                    Instance Name
+                  <span class="required">*</span>
+                </label>
+              <input pi-input autocomplete="off" (blur)="checkInstanceNameExists(instanceName, 'name')" #instanceName
+                formControlName="name" required placeholder="Enter Instance Name">
+              <div *ngIf="isFirstSubmited && firstForm.name.errors?.required">
+                <mat-error>Please Enter Instance Name</mat-error>
+              </div>
+              <div *ngIf="nameExistErrorMessage">
+                <mat-error>Instance Name Already Exists. </mat-error>
+              </div>
+
+              <div *ngIf="isFirstSubmited && firstForm.name.errors?.maxlength">
+                <mat-error>Instance name should not exceed 255 characters</mat-error>
+              </div>
+            </pi-form-field>
+
+            <div class="flex-field">
+              <span>{{instanceUrl?.host}}</span>
+              <pi-form-field  class="w-60" >
+                <div>
+                  <!-- <span>{{instanceUrl?.host}}</span> -->
+                  <input pi-input autocomplete="off" required formControlName="url" [(ngModel)]="enteredInstance" (blur)="checkInstanceNameExistsUrl($event, 'code')" placeholder="Enter Instance URL">
+                  <!-- <span>{{instanceUrl?.url}}</span> -->
+                </div>
+                
+                <div *ngIf="isFirstSubmited && firstForm.url.errors?.required" >
+                  <mat-error>Please Enter Instance URL</mat-error>
+                </div>
+                <div *ngIf="urlExistErrorMessage">
+                  <mat-error>Instance Url Already Exists. </mat-error>
+                </div>
+                <div *ngIf="isFirstSubmited && firstForm.url.errors?.maxlength">
+                  <mat-error>Instance Url should not exceed 255 characters</mat-error>
+                </div>
+              </pi-form-field>
+              <span>{{instanceUrl?.url}}</span>              
+            </div>
+
+            <pi-form-field>
+                <label class="label-name" >
+                    Subscription
+                      <span class="required">*</span>
+                    </label>
+              <pi-select style="text-transform:capitalize;" (click)="valueChanged()"
+                [options]="subscriptions || []" placeholder="Subscription"
+                formControlName="subscription">
+              </pi-select>
+              <div *ngIf="isFirstSubmited && firstForm.subscription.errors?.required">
+                <mat-error>Please select subscription.</mat-error>
+              </div>
+            </pi-form-field>
+            <pi-form-field>
+            <label class="label-name" >
+                Instance Status
+                  <span class="required">*</span>
+                </label>
+            <pi-select style="text-transform:capitalize;" [options]="statusList || []" placeholder="No Access"
+              formControlName="status">
+            </pi-select>
+          </pi-form-field>
+
+            <div class="half-sec" *ngFor="let database of databases">
+              <h3>{{database.name}} Details</h3>
+              <div class="half-sec">
+                <ng-container *ngFor="let field of database.fields">
+                    <pi-form-field *ngIf="field.name!='DB Port'">
+                        <label class="label-name">
+                            {{field.name}}
+                          <span class="required">*</span>
+                        </label>
+                        <input pi-input autocomplete="off" formControlName="{{field.key}}" required
+                          placeholder="Enter {{field.name}}" type="{{field.type}}">
+                        <div *ngIf="isFirstSubmited && firstFormGroup.get(field.key).errors?.required">
+                          <mat-error>Please Enter {{field.name}}</mat-error>
+                        </div>
+                        <div *ngIf="isFirstSubmited && firstFormGroup.get(field.key).errors?.maxlength">
+                          <mat-error>{{field.name}} should not exceed 255 characters</mat-error>
+                        </div>
+                      </pi-form-field>
+                      <pi-form-field *ngIf="field.name=='DB Port'">
+                          <label class="label-name">
+                              Database Port
+                            <span class="required">*</span>
+                          </label>
+                        <input pi-input autocomplete="off" required appNumbersOnly maxlength="10"
+                          oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                          formControlName="{{database.key}}_db_port" placeholder="Enter DB Port">
+                        <div *ngIf="isFirstSubmited && firstFormGroup.get(field.key).errors?.required">
+                          <mat-error>Please Enter DB Port</mat-error>
+                        </div>
+                      </pi-form-field>
+                </ng-container>
+              </div>
+
+            </div>
+          </div>
+          <div class="right-sec">
+            <div>
+              <p class="logo-name">Logo</p>
+              <div class="drop-zone">
+                <div class="upload-btn-wrapper">
+                  <span *ngIf="!InstancelogoUrl"><span class="browse-text">Browse</span></span>
+                  <div *ngIf="InstancelogoUrl">
+                    <div class="uploader-image" [ngStyle]="{'background-image': 'url(' + InstancelogoUrl + ')'}"></div>
+                  </div>
+                  <div *ngIf="InstancelogoUrl" (click)="removeAttachment('logo',fileInstancelogoInput)"
+                    class="delete-icon" title="Delete">
+                    <i class="pixel-icons icon-delete"></i>
+                  </div>
+                  <p *ngIf="InstancelogoUrl" class="change-logo-text">Change Image</p>
+                  <input type="file" #fileInstancelogoInput name="myfile" ng2FileSelect
+                    [uploader]="uploaderInstanceLogo" [ngClass]="{'change-image-input': InstancelogoUrl.length > 0 }"
+                    accept="image/x-jpg,image/x-png,image/gif,image/jpeg" />
+                </div>
+              </div>
+              <p class="valid-msg">Valid file formats are jpg, jpeg, png, gif<span>*</span>
+              </p>
+              <p class="valid-msg">Max file size allowed is 1MB<span>*</span></p>
+              <div class="valid-msg-sec">
+                <!-- <p class="valid-msg">Image will be resized to 48x48 px, Keep the aspect ratio.
+                </p> -->
+                <p *ngIf="maxSizeErrorInstanceLogo" class="valid-msg" style="color: red">Max file size allowed
+                  is 1MB<span> *</span></p>
+                <p *ngIf="extensionErrorInstanceLogo" class="valid-msg" style="color: red">
+                  Valid file formats are jpg, jpeg, png, gif<span> *</span></p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </form>
+      <footer class=" w-100 d-flex  justify-content-end align-items-center ">
+        <div class=" inner-footer justify-content-end d-flex">
+          <button class="text-button" (click)="closeDialog()">Cancel</button>
+          <button class="primary-button m-l-15" [disabled]="nameExistErrorMessage || urlExistErrorMessage" pi-button color="primary"
+            (click)="saveInstance()" matStepperNext>
+            Next
+          </button>
+        </div>
+      </footer>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup" class="themeform add-instance-stepper-form">
+        <ng-template matStepLabel><span (click)="saveInstance()">Theme</span></ng-template>
+        <div class="detail-sec">
+            <mat-spinner *ngIf="disableSave" diameter="30"></mat-spinner>
+
+          <div class="left-sec" fxFlex="70">
+              <mat-error  *ngIf="errorMessage">{{errorMessage}}</mat-error>
+
+            <div class="half1-sec"
+           >
+          
+            
+          
+              <pi-form-field >
+                  <label class="label-name">
+                      Theme Name
+                    <span class="required">*</span>
+                  </label>
+                <input pi-input autocomplete="off" required placeholder="Enter Theme Name" (keyup)="valueChanged()"
+                  formControlName="theme_name">
+                <div *ngIf="isSecondSubmited && secondFormGroup.controls.theme_name.errors?.required">
+                  <mat-error>Please Enter Theme Name</mat-error>
+                </div>
+                <div *ngIf="isSecondSubmited && secondFormGroup.controls.theme_name.errors?.maxlength">
+                  <mat-error>Theme name should not exceed 255 characters
+                  </mat-error>
+                </div>
+              </pi-form-field>
+              <pi-form-field  >
+                  <label class="label-name" >
+                      Font Family
+                        <span class="required">*</span>
+                      </label>
+                <pi-select  style="text-transform:capitalize;  opacity: 0.6 !important;
+                pointer-events: none;" [options]="families || []"
+                  placeholder="Select Font Family" (click)="valueChanged()"
+                  formControlName="font_style">
+                </pi-select>
+                <div *ngIf="isSecondSubmited && !secondFormGroup.value.font_style">
+                  <mat-error class="font-family-error">Please Select Font Family</mat-error>
+                </div>
+              </pi-form-field>
+              <pi-form-field >
+                  <label class="label-name">
+                      Primary Color
+                    <span class="required">*</span>
+                  </label>
+                <input pi-input autocomplete="off" style="opacity: 0.6 !important;pointer-events: none;" readonly>
+                <div class="color_picker">
+                  <input style="  opacity: 0.6 !important;
+                  pointer-events: none;" [(colorPicker)]="primary_color" [cpCancelButton]="false" [cpPosition]="'right'"
+                    [cpOKButton]="true" [cpCloseClickOutside]="true"
+                    (colorPickerClose)="updateColor(primary_color,'primary_color')"
+                    [cpOKButtonClass]="'picker-ok-button'" [style.background]="colorPicker?.primary_color" readonly
+                    class="color_picker_input" />
+                </div> <span class="color_picker_value">{{colorPicker?.primary_color}}</span>
+                <div *ngIf="isSecondSubmited && !colorPicker?.primary_color">
+                  <mat-error>Please Select Primary Color</mat-error>
+                </div>
+              </pi-form-field>
+              <pi-form-field >
+                  <label class="label-name">
+                      Secondary Color
+                    <span class="required">*</span>
+                  </label>
+                <input pi-input autocomplete="off" style="opacity: 0.6 !important;pointer-events: none;" readonly>
+                <div class="color_picker">
+                  <input style="  opacity: 0.6 !important;
+                  pointer-events: none;" [(colorPicker)]="secondary_color" [cpCancelButton]="false" [cpPosition]="'right'"
+                    [cpOKButton]="true" [cpCloseClickOutside]="true"
+                    (colorPickerClose)="updateColor(secondary_color,'secondary_color')"
+                    [cpOKButtonClass]="'picker-ok-button'" [style.background]="colorPicker?.secondary_color" readonly
+                    class="color_picker_input" />
+
+                </div>
+                <span class="color_picker_value">{{colorPicker?.secondary_color}}</span>
+                <div *ngIf="isSecondSubmited && !colorPicker?.secondary_color">
+                  <mat-error>Please Select Secondary Color</mat-error>
+                </div>
+              </pi-form-field>
+              <pi-form-field >
+                  <label class="label-name">
+                      Header Color
+                    <span class="required">*</span>
+                  </label>
+                <input pi-input autocomplete="off" style="opacity: 0.6 !important;pointer-events: none;" readonly>
+                <div class="color_picker">
+                  <input style="  opacity: 0.6 !important;
+                  pointer-events: none;" [(colorPicker)]="header_color" [cpCancelButton]="false" [cpPosition]="'right'"
+                    [cpOKButton]="true" [cpCloseClickOutside]="true"
+                    (colorPickerClose)="updateColor(header_color,'header_color')" [cpOKButtonClass]="'picker-ok-button'"
+                    [style.background]="colorPicker?.header_color" readonly class="color_picker_input" />
+                </div>
+                <span class="color_picker_value">{{colorPicker?.header_color}}</span>
+                <div *ngIf="isSecondSubmited && !colorPicker?.header_color">
+                  <mat-error>Please Select Header Color</mat-error>
+                </div>
+              </pi-form-field>
+              <pi-form-field >
+                  <label class="label-name">
+                      Body Color
+                    <span class="required">*</span>
+                  </label>
+                <input pi-input autocomplete="off" style="opacity: 0.6 !important;pointer-events: none;" readonly>
+                <div class="color_picker">
+                  <input style="  opacity: 0.6 !important;
+                  pointer-events: none;" [(colorPicker)]="body_color" [cpCancelButton]="false" [cpPosition]="'right'"
+                    [cpOKButton]="true" [cpCloseClickOutside]="true"
+                    (colorPickerClose)="updateColor(body_color,'body_color')" [cpOKButtonClass]="'picker-ok-button'"
+                    [style.background]="colorPicker?.body_color" readonly class="color_picker_input" />
+                </div>
+                <span class="color_picker_value">{{colorPicker?.body_color}}</span>
+                <div *ngIf="isSecondSubmited && !colorPicker?.body_color">
+                  <mat-error>Please Select Body Color</mat-error>
+                </div>
+              </pi-form-field>
+              <pi-form-field >
+                  <label class="label-name">
+                      Footer Color
+                    <span class="required">*</span>
+                  </label>
+                <input pi-input autocomplete="off" style="opacity: 0.6 !important;pointer-events: none;" readonly>
+                <div class="color_picker">
+                  <input style="  opacity: 0.6 !important;
+                  pointer-events: none;" [(colorPicker)]="footer_color" [cpCancelButton]="false" [cpPosition]="'right'"
+                    [cpOKButton]="true" [cpCloseClickOutside]="true"
+                    (colorPickerClose)="updateColor(footer_color,'footer_color')" [cpOKButtonClass]="'picker-ok-button'"
+                    [style.background]="colorPicker?.footer_color" readonly class="color_picker_input" />
+                </div>
+                <span class="color_picker_value">{{colorPicker?.footer_color}}</span>
+                <div *ngIf="isSecondSubmited && !colorPicker?.footer_color">
+                  <mat-error>Please Select Footer Color</mat-error>
+                </div>
+              </pi-form-field> 
+
+               <!-- <div>
+                
+                <p class="theme_heading">Brand Button</p>
+                <div>
+                    <pi-form-field label="Button Background Color*">
+                        <input pi-input autocomplete="off" readonly>
+                        <div class="color_picker">
+                          <input [(colorPicker)]="btn_bgColor" [cpCancelButton]="false" [cpPosition]="'right'"
+                            [cpOKButton]="true" [cpCloseClickOutside]="true"
+                            (colorPickerClose)="updateColor(btn_bgColor,'btn_bgColor')" [cpOKButtonClass]="'picker-ok-button'"
+                            [style.background]="colorPicker?.btn_bgColor" readonly class="color_picker_input" />
+                        </div>
+                        <span class="color_picker_value">{{colorPicker?.btn_bgColor}}</span>
+                        <div *ngIf="isSecondSubmited && !colorPicker?.btn_bgColor">
+                          <mat-error>Please Select Button Background Color</mat-error>
+                        </div>
+                      </pi-form-field>
+        
+                      <pi-form-field label="Button Text Color*">
+                        <input pi-input autocomplete="off" readonly>
+                        <div class="color_picker">
+                          <input [(colorPicker)]="btn_textColor" [cpCancelButton]="false" [cpPosition]="'right'"
+                            [cpOKButton]="true" [cpCloseClickOutside]="true"
+                            (colorPickerClose)="updateColor(btn_textColor,'btn_textColor')" [cpOKButtonClass]="'picker-ok-button'"
+                            [style.background]="colorPicker?.btn_textColor" readonly class="color_picker_input" />
+                        </div>
+                        <span class="color_picker_value">{{colorPicker?.btn_textColor}}</span>
+                        <div *ngIf="isSecondSubmited && !colorPicker?.btn_textColor">
+                          <mat-error>Please Select Button Text Color</mat-error>
+                        </div>
+                      </pi-form-field>
+                      <pi-form-field label="Button Hover Color*">
+                          <input pi-input autocomplete="off" readonly>
+                          <div class="color_picker">
+                            <input [(colorPicker)]="btn_hoverColor" [cpCancelButton]="false" [cpPosition]="'right'"
+                              [cpOKButton]="true" [cpCloseClickOutside]="true"
+                              (colorPickerClose)="updateColor(btn_hoverColor,'btn_hoverColor')" [cpOKButtonClass]="'picker-ok-button'"
+                              [style.background]="colorPicker?.btn_hoverColor" readonly class="color_picker_input" />
+                          </div>
+                          <span class="color_picker_value">{{colorPicker?.btn_hoverColor}}</span>
+                          <div *ngIf="isSecondSubmited && !colorPicker?.btn_hoverColor">
+                            <mat-error>Please Select Button Hover Color</mat-error>
+                          </div>
+                        </pi-form-field>
+                      
+                </div>
+              
+              </div>  -->
+
+              <!-- <div>
+                
+                  <p class="theme_heading">Secondary Button</p>
+                  <div>
+                      <pi-form-field label="Secondary Button Background Color*">
+                          <input pi-input autocomplete="off" readonly>
+                          <div class="color_picker">
+                            <input [(colorPicker)]="secBtn_bgColor" [cpCancelButton]="false" [cpPosition]="'right'"
+                              [cpOKButton]="true" [cpCloseClickOutside]="true"
+                              (colorPickerClose)="updateColor(secBtn_bgColor,'secBtn_bgColor')" [cpOKButtonClass]="'picker-ok-button'"
+                              [style.background]="colorPicker?.secBtn_bgColor" readonly class="color_picker_input" />
+                          </div>
+                          <span class="color_picker_value">{{colorPicker?.secBtn_bgColor}}</span>
+                          <div *ngIf="isSecondSubmited && !colorPicker?.secBtn_bgColor">
+                            <mat-error>Please Select Secondary Button Background Color</mat-error>
+                          </div>
+                        </pi-form-field>
+          
+                        <pi-form-field label="Secondary Button Text Color*">
+                          <input pi-input autocomplete="off" readonly>
+                          <div class="color_picker">
+                            <input [(colorPicker)]="secBtn_textColor" [cpCancelButton]="false" [cpPosition]="'right'"
+                              [cpOKButton]="true" [cpCloseClickOutside]="true"
+                              (colorPickerClose)="updateColor(secBtn_textColor,'secBtn_textColor')" [cpOKButtonClass]="'picker-ok-button'"
+                              [style.background]="colorPicker?.secBtn_textColor" readonly class="color_picker_input" />
+                          </div>
+                          <span class="color_picker_value">{{colorPicker?.secBtn_textColor}}</span>
+                          <div *ngIf="isSecondSubmited && !colorPicker?.secBtn_textColor">
+                            <mat-error>Please Select Secondary Button Text Color</mat-error>
+                          </div>
+                        </pi-form-field>
+                        <pi-form-field label="Secondary Button Hover Color*">
+                            <input pi-input autocomplete="off" readonly>
+                            <div class="color_picker">
+                              <input [(colorPicker)]="secBtn_hoverColor" [cpCancelButton]="false" [cpPosition]="'right'"
+                                [cpOKButton]="true" [cpCloseClickOutside]="true"
+                                (colorPickerClose)="updateColor(secBtn_hoverColor,'secBtn_hoverColor')" [cpOKButtonClass]="'picker-ok-button'"
+                                [style.background]="colorPicker?.secBtn_hoverColor" readonly class="color_picker_input" />
+                            </div>
+                            <span class="color_picker_value">{{colorPicker?.secBtn_hoverColor}}</span>
+                            <div *ngIf="isSecondSubmited && !colorPicker?.secBtn_hoverColor">
+                              <mat-error>Please Select Secondary Button Hover Color</mat-error>
+                            </div>
+                          </pi-form-field>
+                        
+                  </div>
+                
+                </div>  -->
+
+                <!-- <div>
+                
+                  <p class="theme_heading">Text Button</p>
+                  <div>
+                     
+                        <pi-form-field label="Text Button Text Color*">
+                          <input pi-input autocomplete="off" readonly>
+                          <div class="color_picker">
+                            <input [(colorPicker)]="textBtn_textColor" [cpCancelButton]="false" [cpPosition]="'right'"
+                              [cpOKButton]="true" [cpCloseClickOutside]="true"
+                              (colorPickerClose)="updateColor(textBtn_textColor,'textBtn_textColor')" [cpOKButtonClass]="'picker-ok-button'"
+                              [style.background]="colorPicker?.textBtn_textColor" readonly class="color_picker_input" />
+                          </div>
+                          <span class="color_picker_value">{{colorPicker?.textBtn_textColor}}</span>
+                          <div *ngIf="isSecondSubmited && !colorPicker?.textBtn_textColor">
+                            <mat-error>Please Select Text Button Text Color</mat-error>
+                          </div>
+                        </pi-form-field>
+                        <pi-form-field label="Text Button Hover Color*">
+                            <input pi-input autocomplete="off" readonly>
+                            <div class="color_picker">
+                              <input [(colorPicker)]="textBtn_hoverColor" [cpCancelButton]="false" [cpPosition]="'right'"
+                                [cpOKButton]="true" [cpCloseClickOutside]="true"
+                                (colorPickerClose)="updateColor(textBtn_hoverColor,'textBtn_hoverColor')" [cpOKButtonClass]="'picker-ok-button'"
+                                [style.background]="colorPicker?.textBtn_hoverColor" readonly class="color_picker_input" />
+                            </div>
+                            <span class="color_picker_value">{{colorPicker?.textBtn_hoverColor}}</span>
+                            <div *ngIf="isSecondSubmited && !colorPicker?.textBtn_hoverColor">
+                              <mat-error>Please Select Text Button Hover Color</mat-error>
+                            </div>
+                          </pi-form-field>
+                        
+                  </div>
+                
+                </div>  -->
+            </div>
+            <pi-form-field label="CSS/Styles">
+              <textarea style="  opacity: 0.6 !important;
+              pointer-events: none;" minRows="3" spellcheck="false" formControlName="custom_css" pi-input></textarea>
+            </pi-form-field>
+
+          </div>
+          <div class="right-sec" fxFlex="30">
+            <div>
+              <p class="logo-name">Login Background Logo</p>
+
+              <span *ngIf="InstancelogoUrl">
+                <!-- <img [src]="InstancelogoUrl" height="200" width="300"> -->
+              </span>
+              <div class="drop-zone">
+                <div class="upload-btn-wrapper">
+                  <span *ngIf="!loginBackUrl"><span class="browse-text">Browse</span></span>
+                  <div *ngIf="loginBackUrl">
+                    <div class="uploader-image" [ngStyle]="{'background-image': 'url(' + loginBackUrl + ')'}"></div>
+                  </div>
+                  <!-- <span *ngIf="InstancelogoUrl"> <img [src]="InstancelogoUrl" height="200" width="500"></span> -->
+                  <div *ngIf="loginBackUrl" (click)="removeAttachment('login-back',fileloginBackUrlInput)"
+                    class="delete-icon" title="Delete">
+                    <i class="pixel-icons icon-delete"></i>
+                  </div>
+                  <p *ngIf="loginBackUrl" class="change-logo-text">Change Image</p>
+                  <input type="file" #fileloginBackUrlInput name="myfile" ng2FileSelect [uploader]="uploaderLoginBack"
+                    [ngClass]="{'change-image-input': loginBackUrl.length > 0 }"
+                    accept="image/x-jpg,image/x-png,image/gif,image/jpeg" />
+                </div>
+              </div>
+              <p class="valid-msg">Valid file formats are jpg, jpeg, png, gif<span>*</span>
+              </p>
+              <p class="valid-msg">Max file size allowed is 1MB<span>*</span></p>
+              <div class="valid-msg-sec">
+                <!-- <p class="valid-msg">Image will be resized to 48x48 px, Keep the aspect ratio.
+                </p> -->
+                <p *ngIf="maxSizeErrorLoginBackLogo" class="valid-msg" style="color: red">Max file size allowed
+                  is 1MB<span> *</span></p>
+                  <p *ngIf="extensionErrorLoginBackLogo" class="valid-msg"
+                  style="color: red">
+                  Valid file formats are jpg, jpeg, png, gif<span> *</span></p>
+         
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button> -->
+
+      </form>
+
+      <!-- <div>
+        <p *ngIf="errorMessage" class="errorMsg-class">{{errorMessage}}</p>
+      </div> -->
+      <footer class=" w-100 d-flex  justify-content-end align-items-center ">
+        <div class=" inner-footer justify-content-end d-flex">
+          <button class="text-button" (click)="closeDialog()" matStepperPrevious>Cancel</button>
+          <button *ngIf="isSecondFromValid" class="primary-button m-l-15" pi-button color="primary"
+          [disabled]="disableSave"
+            (click)="saveInstanceTheme()" matStepperNext>
+            Save
+          </button>
+          <button *ngIf="!isSecondFromValid"  [disabled]="disableSave" class="primary-button m-l-15" pi-button color="primary"
+            (click)="saveInstanceTheme()">
+            Save
+          </button>
+        </div>
+      </footer>
+    </mat-step>
+    <!-- <mat-step>
+      <ng-template matStepLabel><span (click)="saveInstanceTheme()">Features</span></ng-template>
+      <form [formGroup]="thirdFormGroup" class="add-instance-stepper-form">
+        <div *ngFor="let feature of features" class="features">
+          <h4 class="side-title">{{feature.name}}</h4>
+          <div class="user-access-details user-profile-alignment-view d-flex">
+            <aside>
+              <div class="user-contact-details ">
+                <div class="user-access-body-sec">
+                  <div class="user-access-body d-flex">
+                    <div class="user-access-item" *ngFor="let childList of feature.childList">
+                      <span class="left-sec">
+                        <i class="product-icon icon-instances"></i>
+                        <i class="item-name">{{childList.name}}</i>
+                      </span>
+                      <span class="right-sec">
+                        <div *ngIf="childList.type=='radio'">
+                          <mat-button-toggle-group class="tp-radio-group" [formControlName]="childList.code">
+                            <mat-button-toggle class="tp-radio-button" *ngFor="let option of childList.options"
+                              [value]="option.value">
+                              {{option.label}}
+                            </mat-button-toggle>
+                          </mat-button-toggle-group>
+                        </div>
+                        <div *ngIf="childList.type=='select'">
+                          <mat-form-field>
+                            <mat-select [formControlName]="childList.code">
+                              <mat-option *ngFor="let option of childList.options" [value]="option.value">
+                                {{option.label}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="childList.type=='text'">
+                          <pi-form-field>
+                            <input pi-input autocomplete="off" [formControlName]="childList.code"
+                              placeholder="{{childList.name}}">
+                          </pi-form-field>
+                        </div>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </form>
+      <footer class=" w-100 d-flex  justify-content-end align-items-center ">
+        <div class=" inner-footer justify-content-end d-flex">
+          <button class="text-button" (click)="closeDialog()" matStepperPrevious>Cancel</button>
+          <button class="primary-button m-l-15" pi-button color="primary" (click)="saveFeaturesInfo()"
+            (click)="stepper.reset()">
+            Save
+          </button>
+        </div>
+      </footer>
+
+    </mat-step> -->
+  </mat-horizontal-stepper>
+
+</div>
+<div mat-dialog-actions>
+</div>

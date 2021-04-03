@@ -1,0 +1,106 @@
+.list-group-item{
+    list-style: none;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #E4E4E4;
+    input[type=checkbox]{
+        height: 20px;
+        width: 20px;
+        vertical-align:middle;
+    }
+    div.child-list{
+        margin-top: 10px;
+        .list-group-item{
+            background-color: #fff;
+        }
+    }
+}
+
+.single {
+    width: 45%;
+    margin-left: 500px;
+    padding: 30px 15px;
+    margin-top: 40px;
+    background: #fcfcfc;
+    border: 1px solid #f0f0f0; 
+}
+    .single h3.side-title {
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 0;
+    font-size: 20px;
+    color: #333;
+    text-transform: uppercase; }
+    .single h3.side-title:after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: #ff173c;
+    display: block;
+    margin-top: 6px; }
+    
+    .single ul {
+    margin-bottom: 0;border: 1px solid #f0f0f0; }
+    .single li {
+        
+    color: #666;
+    font-size: 14px;
+    text-transform: uppercase;
+    // border-bottom: 1px solid #f0f0f0;
+    line-height: 40px;
+    display: block;
+    text-decoration: none; }
+    .single li:hover {
+    color: #ff173c; }
+    .single li:last-child {
+    border-bottom: 0; }
+
+    .parent-container {
+        display: flex;
+    align-items: flex-start;
+    border: none;
+    padding: 8px 12px; 
+    color: rgba(23, 43, 77, 0.8);
+    }
+    .feature-name {
+        width: 75%;
+        font-size: 13px;
+    }
+    .feature-actions {
+        width: 25%;
+    }
+    .mat-radio-group {
+        .mat-radio-button {
+            padding: 2px 8px; 
+            background: #f5f6f8;
+            /* #ddeaff */
+            /*margin-left: 2px;
+            border-radius: 2px;*/
+            @media screen and (min-width: 600px) {
+                padding: 5px 14px;
+            }
+            ::ng-deep .mat-radio-label {
+                position: relative;
+                .mat-radio-container {
+                    position: absolute;
+                    opacity: 0;
+                }
+                .mat-radio-label-content {
+                    padding-left: 0;
+                    font-size: 13px;
+                    @media screen and (min-width: 960px) {
+                        font-size: 13px;
+                    }
+                }
+            }
+            &.mat-radio-checked {
+                background: #ddeaff;
+            }
+            &:first-child {
+                border-radius: 2px 0 0 2px;
+            }
+            &:last-child {
+                border-radius: 0 2px 2px 0;
+            }
+        }
+    }

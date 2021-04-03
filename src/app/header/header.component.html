@@ -1,0 +1,192 @@
+<div class="toolbar" style="position: relative;z-index: 999;box-shadow: 1px 0px rgba(0,0,0,0.1)" *ngIf="_commonService.headerShow">
+  <div class="side-menu-top">
+    <div class="app-logo-icon">
+      <figure><img [src]="appurl + 'public/images/Expodite_Logo_menu.png'" /></figure>
+      <!--  [src]="imagesUrls.logo" -->
+    </div>
+    <a *ngIf="userType==1" (click)="toggleMainSidebar()"> <i class="product-icon icon-menu"></i> </a>
+    <div class="seperator"></div>
+    <a matTooltip="Dashboard" (click)="setTitle( 'Dashboard' )" [routerLink]="['/dashboard']" routerLinkActive="active">
+      <i class="product-icon icon-dashboard">
+      </i>
+    </a>
+    <a  *ngIf="userType==1" matTooltip="Instances" (click)="setTitle( 'Instances' )" [routerLink]="['/instances']" routerLinkActive="active">
+      <i class="product-icon icon-instances">
+      </i></a>
+    <a *ngIf="userType==1" matTooltip="Subscriptions" (click)="setTitle( 'Subscriptions' )" [routerLink]="['/subscriptions']" routerLinkActive="active">
+      <img class="subscibe_img" [src]="appurl + 'public/images/Subscribe.svg'" alt="subscription"/>  
+    </a>
+    <a matTooltip="Users" (click)="setTitle( 'Users' )" *ngIf="userType==1" [routerLink]="['/users']"
+      routerLinkActive="active"> <i class="product-icon icon-users">
+      </i>
+    </a>
+    <a matTooltip="Super Admin" (click)="setTitle( 'Super Admin' )" *ngIf="userType==1"
+      [routerLink]="['/superadmin/settings']" routerLinkActive="active">
+      <i class="product-icon icon-setting">
+      </i>
+    </a>
+  </div>
+  <div class="side-menu-bottom">
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+      <!-- <div class="user-image" [style.backgroundImage]="'url('http://local-expodite.co.in/api/storage/app/UserImages/1611316274.jpeg')'">
+       
+    </div> -->
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <!-- <ng-container *ngIf="switchAdmin == 1">
+        <a class="manage-Account" mat-menu-item (click)="switchLogin()">{{ switchToLabel }}</a>
+      </ng-container> -->
+      <a class="manage-Account" mat-menu-item matTooltip="Admin"
+       >Welcome {{userName}}</a>
+      <a class="manage-Account" mat-menu-item matTooltip="Admin" [routerLink]="['/userprofile']"
+        routerLinkActive="active">Manage Account</a>
+      <a class="logout" mat-menu-item href="{{appurl}}logout">Logout</a>
+    </mat-menu>
+  </div>
+</div>
+
+
+<!-- Main Menu Starts -->
+<div class="primary-nav-container" [ngClass]="showMainHeader ? 'hide' : 'show'" *ngIf="_commonService.headerShow">
+  <div class="app-primary-nav parent-menu">
+    <div class="nav-data" [ngClass]="showChild ? 'hide' : 'show'">
+      <ng-container>
+        <div class="alist-logo">
+          <h1>Productization </h1>
+          <!-- <span (click)="toggleMainSidebar()" style="margin-left: 45px;" title="close">x</span> -->
+
+        </div>
+      </ng-container>
+      <div class="list">
+        <div class="item" *ngFor="let parent of mainMenuTabs">
+          <span class="parent-group" *ngIf="parent.header">{{ parent.header }}</span>
+          <ng-container *ngFor="let tab of parent['children']">
+            <ng-container *ngIf="tab['children'].length; else notChildTemplate">
+              <!-- <div class="mitem"> -->
+              <a class="nav-links" [ngClass]="tab.key" (click)="openChildMenu(tab)"
+                [class.active]="router.url.match(tab.href)">
+                <span class="second-menu-icons {{ tab.id }}"> <i class="product-icon {{ tab.icon }}"></i> </span>
+                <span class="menu-item-text">{{ tab.name}}</span>
+              </a>
+              <!-- </div> -->
+            </ng-container>
+
+
+            <ng-template #notChildTemplate>
+              <a class="nav-links" [class.active]="router.url.match(tab.href)" (click)="setTitle(tab.name)"
+                (click)="openLink(tab,$event)">
+                <span class="second-menu-icons {{ tab.id }}"> <i class="product-icon {{ tab.icon }}"></i> </span>
+                <!-- <span *ngIf="(tab.id=='instances' || tab.id=='users') && isCountsLoading"> <mat-spinner diameter="12"></mat-spinner></span> -->
+                <span class="menu-item-text">{{ tab.name }} <span
+                    *ngIf="tab.id=='instances' && !isCountsLoading">({{instancesCount}})</span><span
+                    *ngIf="tab.id=='users' && !isCountsLoading">({{usersCount}})</span></span>
+              </a>
+            </ng-template>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="nav-data child" [ngClass]="showChild ? 'show' : 'hide'">
+      <ng-container>
+        <div class="back-to-menu" (click)="backToParent()">
+          <i class="pixel-icon icon-arrow-left-circle"></i>
+          <div class="alist-logo">
+            <h1>Productization</h1>
+          </div>
+        </div>
+        <div class="inner-nav-title">
+          <i class="pixel-icon {{ childMenu?.icon }}"></i>
+          <span>{{ childMenu?.name }}</span>
+        </div>
+      </ng-container>
+      <div class="list">
+        <div class="item">
+          <ng-container *ngFor="let tab of childMenu?.children">
+            <a class="nav-links" [ngClass]="tab.key" [class.active]="router.url.match(tab.href)"
+              (click)="openLink(tab,$event)">
+              <span class="second-menu-icons"> <i class="pixel-icon {{ tab.icon }}"></i> </span>
+              <span class="menu-item-text">{{ tab.name }}</span>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="childMenu?.filters">
+            <hr />
+            <ng-container *ngFor="let tab of childMenu?.filters">
+              <a class="nav-links" [ngClass]="tab.key" [class.active]="router.url.match(tab.href)"
+                (click)="openLink(tab,$event)">
+                <span class="second-menu-icons"> <i class="pixel-icon {{ tab.icon }}"></i> </span>
+                <span class="menu-item-text">{{ tab.name }}</span>
+              </a>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>
+<!-- Main Menu Ends -->
+
+<!-- Users Menu Starts -->
+<div class="primary-nav-container" [ngClass]="showUserHeader ? 'hide' : 'show'" *ngIf="_commonService.headerShow">
+  <div class="app-primary-nav parent-menu">
+    <div class="nav-data">
+      <ng-container>
+        <div class="alist-logo">
+          <h1>Productization</h1>
+        </div>
+      </ng-container>
+      <div class="list">
+        <div class="item" *ngFor="let parent of tabs">
+          <span class="parent-group" *ngIf="parent.header">{{ parent.header }}</span>
+          <ng-container *ngFor="let tab of parent['children']">
+            <ng-container *ngIf="tab['children'].length; else notChildTemplate">
+              <div class="mitem">
+                <a class="nav-links" [ngClass]="tab.key" (click)="openLink(tab,$event)"
+                  [class.active]="router.url.match(tab.href)">
+                  <span class="second-menu-icons"> <i class="gallery-icon {{ tab.icon }}"></i> </span>
+                  <span class="menu-item-text">{{ tab.name }}</span>
+                </a>
+              </div>
+            </ng-container>
+            <ng-template #notChildTemplate>
+              <a class="nav-links" [class.active]="router.url.match(tab.href)" (click)="openLink(tab,$event)">
+                <span class="second-menu-icons"> <i class="gallery-icon {{ tab.icon }}"></i> </span>
+                <span class="menu-item-text">{{ tab.name }}</span>
+              </a>
+            </ng-template>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Users Menu Ends -->
+
+
+<!-- Gallery Menu Starts -->
+<div class="primary-nav-container" [ngClass]="showGalleryHeader ? 'hide' : 'show'" *ngIf="_commonService.headerShow">
+  <div class="app-primary-nav parent-menu">
+    <div class="nav-data">
+      <ng-container>
+        <div class="alist-logo">
+          <h1>Productization</h1>
+        </div>
+      </ng-container>
+
+      <mat-list role="list" class="gallery-menu-items">
+        <mat-list-item role="listitem"><i class="material-icons"> date_range</i>This Week</mat-list-item>
+        <mat-list-item role="listitem"><i class="material-icons">calendar_today</i>Upcoming Week</mat-list-item>
+        <mat-list-item role="listitem"><i class="material-icons">compare</i>Competitors</mat-list-item>
+        <mat-list-item role="listitem"><i class="material-icons">picture_in_picture_alt</i>Other Ads</mat-list-item>
+      </mat-list>
+
+
+      <mat-list role="list" class="toggle-sec">
+        <mat-slide-toggle>Sales Info</mat-slide-toggle>
+        <mat-slide-toggle>Marketing Info</mat-slide-toggle>
+      </mat-list>
+
+    </div>
+  </div>
+</div>
+<!-- Gallery Menu Ends -->
